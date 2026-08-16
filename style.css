@@ -55,7 +55,7 @@ a {
 
     z-index: -1;
 
-    opacity: .7;
+    opacity: .55;
 }
 
 
@@ -501,7 +501,7 @@ a {
 
     padding: 30px;
 
-    overflow: hidden;
+    overflow: visible;
 
     border:
         1px solid
@@ -551,7 +551,11 @@ a {
 .feature-card h3 {
     margin-top: 55px;
 
-    font-size: 27px;
+    font-size: clamp(22px, 2vw, 27px);
+    line-height: 1.25;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    max-width: 100%;
 }
 
 
@@ -562,6 +566,8 @@ a {
         rgba(255,255,255,.58);
 
     line-height: 1.65;
+    word-break: break-word;
+    overflow-wrap: anywhere;
 }
 
 
@@ -873,15 +879,10 @@ footer {
     top: 50%;
     width: var(--size);
     height: var(--size);
-    border-radius: 50%;
+    border-radius: 2px;
     pointer-events: none;
-    background: radial-gradient(
-        circle,
-        hsla(var(--hue), 100%, 75%, 1) 0%,
-        hsla(calc(var(--hue) + 12), 100%, 65%, 0.9) 35%,
-        rgba(255, 255, 255, 0) 100%
-    );
-    box-shadow: 0 0 14px hsla(var(--hue), 100%, 70%, 0.8);
+    background: var(--particle-color);
+    box-shadow: 0 0 8px rgba(150, 220, 110, 0.18);
     opacity: 0;
     animation: particleBurst 700ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
@@ -891,18 +892,18 @@ footer {
 
 .cursor-glow {
     position: fixed;
-    width: 30px;
-    height: 30px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
     pointer-events: none;
     z-index: 999;
     background: radial-gradient(
         circle,
-        rgba(0, 180, 255, 0.4),
+        rgba(0, 180, 255, 0.2),
         rgba(0, 180, 255, 0)
     );
     transform: translate(-50%, -50%);
-    filter: blur(8px);
+    filter: blur(6px);
 }
 
 

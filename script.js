@@ -34,8 +34,16 @@ function setupParticles() {
 
     const particles = [];
 
+    const palette = [
+        "rgba(150, 190, 120, 0.65)",
+        "rgba(120, 170, 100, 0.58)",
+        "rgba(100, 140, 78, 0.5)",
+        "rgba(180, 150, 105, 0.45)",
+        "rgba(130, 130, 130, 0.42)"
+    ];
+
     const particleCount =
-        Math.min(80, Math.floor(width / 15));
+        Math.min(48, Math.floor(width / 22));
 
     for (let i = 0; i < particleCount; i++) {
 
@@ -44,16 +52,19 @@ function setupParticles() {
             y: Math.random() * height,
 
             size:
-                Math.random() * 1.8 + 0.5,
+                Math.random() * 1.8 + 1,
 
             speedX:
-                (Math.random() - 0.5) * 0.3,
+                (Math.random() - 0.5) * 0.18,
 
             speedY:
-                (Math.random() - 0.5) * 0.3,
+                (Math.random() - 0.5) * 0.18,
 
             opacity:
-                Math.random() * 0.45 + 0.1
+                Math.random() * 0.26 + 0.08,
+
+            color:
+                palette[Math.floor(Math.random() * palette.length)]
         });
 
     }
@@ -98,24 +109,18 @@ function setupParticles() {
             if (particle.y > height)
                 particle.y = 0;
 
-
-            ctx.beginPath();
-
-            ctx.arc(
+            ctx.globalAlpha = particle.opacity;
+            ctx.fillStyle = particle.color;
+            ctx.fillRect(
                 particle.x,
                 particle.y,
                 particle.size,
-                0,
-                Math.PI * 2
+                particle.size
             );
 
-
-            ctx.fillStyle =
-                `rgba(255,255,255,${particle.opacity})`;
-
-            ctx.fill();
-
         });
+
+        ctx.globalAlpha = 1;
 
 
         requestAnimationFrame(animate);
@@ -145,7 +150,13 @@ function setupClickEffect() {
         burst.style.top =
             `${event.clientY}px`;
 
-        const particleCount = 18;
+        const particleCount = 10;
+        const particleColors = [
+            "rgba(150, 220, 110, 0.9)",
+            "rgba(120, 190, 90, 0.8)",
+            "rgba(195, 166, 118, 0.7)",
+            "rgba(130, 128, 128, 0.7)"
+        ];
 
         for (let i = 0; i < particleCount; i++) {
 
@@ -157,7 +168,7 @@ function setupClickEffect() {
                 (Math.random() - 0.5) * 0.7;
 
             const distance =
-                18 + Math.random() * 38;
+                10 + Math.random() * 22;
 
             const offsetX =
                 Math.cos(angle) * distance;
@@ -166,16 +177,16 @@ function setupClickEffect() {
                 Math.sin(angle) * distance;
 
             const size =
-                4 + Math.random() * 8;
-
-            const hue =
-                190 + Math.random() * 70;
+                2 + Math.random() * 4;
 
             particle.className = "click-particle";
             particle.style.setProperty("--dx", `${offsetX}px`);
             particle.style.setProperty("--dy", `${offsetY}px`);
             particle.style.setProperty("--size", `${size}px`);
-            particle.style.setProperty("--hue", `${hue}`);
+            particle.style.setProperty(
+                "--particle-color",
+                particleColors[Math.floor(Math.random() * particleColors.length)]
+            );
 
             burst.appendChild(particle);
 
