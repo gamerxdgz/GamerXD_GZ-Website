@@ -127,30 +127,65 @@ function setupParticles() {
 
 
 /* =========================================
-   Click Ripple
+   Click Particle Burst
 ========================================= */
 
 function setupClickEffect() {
 
-    document.addEventListener("click", event => {
+    document.addEventListener("pointerdown", event => {
 
-        const ripple =
+        const burst =
             document.createElement("div");
 
-        ripple.className = "click-ripple";
+        burst.className = "click-burst";
 
-        ripple.style.left =
+        burst.style.left =
             `${event.clientX}px`;
 
-        ripple.style.top =
+        burst.style.top =
             `${event.clientY}px`;
 
-        document.body.appendChild(ripple);
+        const particleCount = 18;
 
+        for (let i = 0; i < particleCount; i++) {
+
+            const particle =
+                document.createElement("span");
+
+            const angle =
+                (Math.PI * 2 * i) / particleCount +
+                (Math.random() - 0.5) * 0.7;
+
+            const distance =
+                18 + Math.random() * 38;
+
+            const offsetX =
+                Math.cos(angle) * distance;
+
+            const offsetY =
+                Math.sin(angle) * distance;
+
+            const size =
+                4 + Math.random() * 8;
+
+            const hue =
+                190 + Math.random() * 70;
+
+            particle.className = "click-particle";
+            particle.style.setProperty("--dx", `${offsetX}px`);
+            particle.style.setProperty("--dy", `${offsetY}px`);
+            particle.style.setProperty("--size", `${size}px`);
+            particle.style.setProperty("--hue", `${hue}`);
+
+            burst.appendChild(particle);
+
+        }
+
+        document.body.appendChild(burst);
 
         setTimeout(() => {
-            ripple.remove();
-        }, 600);
+            burst.remove();
+        }, 700);
 
     });
 
