@@ -135,20 +135,80 @@
     <section class="settings-page">
         <div class="settings-header">
             <span class="section-label">APPEARANCE</span>
-            <h1>Simple atmospheric background</h1>
+            <h1>Choose a gradient</h1>
         </div>
 
-        <div class="settings-grid" style="grid-template-columns: 1fr;">
-            <div class="weather-option active" style="min-height: 150px; cursor: default;">
-                <small>Theme</small>
-                <strong>Purple / Blue Gradient</strong>
-                <p style="margin-top: 12px; color: rgba(255,255,255,0.7); line-height: 1.6;">
-                    The background is intentionally fixed to a clean purple-blue gradient with gentle floating particles for a calm, low-noise look.
-                </p>
-            </div>
+        <div class="settings-grid" id="themeGrid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+            <button class="weather-option active" type="button" data-theme="purple-blue">
+                <small>Default</small>
+                <strong>Purple Blue Gradient</strong>
+            </button>
+            <button class="weather-option" type="button" data-theme="blue-purple">
+                <small>Cool</small>
+                <strong>Blue Purple Gradient</strong>
+            </button>
+            <button class="weather-option" type="button" data-theme="blue-green">
+                <small>Ocean</small>
+                <strong>Blue Green</strong>
+            </button>
+            <button class="weather-option" type="button" data-theme="green-blue">
+                <small>Fresh</small>
+                <strong>Green Blue</strong>
+            </button>
+            <button class="weather-option" type="button" data-theme="red-blue">
+                <small>Warm</small>
+                <strong>Red Blue</strong>
+            </button>
+            <button class="weather-option" type="button" data-theme="blue-red">
+                <small>Vivid</small>
+                <strong>Blue Red</strong>
+            </button>
+            <button class="weather-option" type="button" data-theme="purple-red">
+                <small>Bold</small>
+                <strong>Purple Red</strong>
+            </button>
+            <button class="weather-option" type="button" data-theme="red-purple">
+                <small>Glow</small>
+                <strong>Red Purple</strong>
+            </button>
+            <button class="weather-option" type="button" data-theme="violet-cyan">
+                <small>Electric</small>
+                <strong>Violet Cyan</strong>
+            </button>
+            <button class="weather-option" type="button" data-theme="cyan-violet">
+                <small>Night</small>
+                <strong>Cyan Violet</strong>
+            </button>
+            <button class="weather-option" type="button" data-theme="black">
+                <small>Dark</small>
+                <strong>Black Theme</strong>
+            </button>
         </div>
     </section>
 </main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const themeButtons = document.querySelectorAll('[data-theme]');
+        const savedTheme = localStorage.getItem('gamerxdgz_theme') || 'purple-blue';
+
+        function setActiveTheme(name) {
+            themeButtons.forEach((button) => {
+                const isActive = button.dataset.theme === name;
+                button.classList.toggle('active', isActive);
+            });
+            if (window.applyTheme) {
+                window.applyTheme(name);
+            }
+        }
+
+        themeButtons.forEach((button) => {
+            button.addEventListener('click', () => setActiveTheme(button.dataset.theme));
+        });
+
+        setActiveTheme(savedTheme);
+    });
+</script>
 
 <footer>
     <div class="footer-bottom">

@@ -8,6 +8,152 @@
 window.setWeatherPreset = function setWeatherPreset() {};
 window.fetchWeatherWithLocation = function fetchWeatherWithLocation() {};
 
+const THEME_KEY = "gamerxdgz_theme";
+const GRADIENT_THEMES = {
+    "purple-blue": {
+        "--bg-top": "#1d1237",
+        "--bg-mid": "#2d1d52",
+        "--bg-low": "#3a4f9a",
+        "--bg-deep": "#1b2546",
+        "--card-bg-1": "rgba(255,255,255,0.18)",
+        "--card-bg-2": "rgba(126,132,255,0.12)",
+        "--card-border": "rgba(255,255,255,0.28)",
+        "--card-shadow": "0 18px 45px rgba(96, 77, 204, 0.22)",
+        "--card-text": "rgba(255,255,255,0.96)",
+        "--card-muted": "rgba(235,240,255,0.72)"
+    },
+    "blue-purple": {
+        "--bg-top": "#102a52",
+        "--bg-mid": "#3a57c8",
+        "--bg-low": "#5c3bbd",
+        "--bg-deep": "#190f33",
+        "--card-bg-1": "rgba(255,255,255,0.16)",
+        "--card-bg-2": "rgba(98,138,255,0.12)",
+        "--card-border": "rgba(198,219,255,0.28)",
+        "--card-shadow": "0 18px 45px rgba(59, 97, 255, 0.2)",
+        "--card-text": "rgba(255,255,255,0.96)",
+        "--card-muted": "rgba(222,231,255,0.74)"
+    },
+    "blue-green": {
+        "--bg-top": "#0d2944",
+        "--bg-mid": "#1f5f9b",
+        "--bg-low": "#15a38d",
+        "--bg-deep": "#0b2e2f",
+        "--card-bg-1": "rgba(255,255,255,0.15)",
+        "--card-bg-2": "rgba(90,220,210,0.1)",
+        "--card-border": "rgba(200,255,247,0.24)",
+        "--card-shadow": "0 18px 45px rgba(30, 143, 165, 0.22)",
+        "--card-text": "rgba(245,255,255,0.97)",
+        "--card-muted": "rgba(220,245,242,0.72)"
+    },
+    "green-blue": {
+        "--bg-top": "#092b2d",
+        "--bg-mid": "#1b9a8c",
+        "--bg-low": "#2d6fe1",
+        "--bg-deep": "#0d1d45",
+        "--card-bg-1": "rgba(255,255,255,0.14)",
+        "--card-bg-2": "rgba(86,222,181,0.12)",
+        "--card-border": "rgba(214,255,240,0.24)",
+        "--card-shadow": "0 18px 45px rgba(43, 168, 154, 0.2)",
+        "--card-text": "rgba(245,255,250,0.97)",
+        "--card-muted": "rgba(220,244,236,0.72)"
+    },
+    "red-blue": {
+        "--bg-top": "#341827",
+        "--bg-mid": "#7c2e5f",
+        "--bg-low": "#2b76d3",
+        "--bg-deep": "#111d38",
+        "--card-bg-1": "rgba(255,255,255,0.14)",
+        "--card-bg-2": "rgba(255,123,155,0.12)",
+        "--card-border": "rgba(255,221,230,0.24)",
+        "--card-shadow": "0 18px 45px rgba(199, 72, 120, 0.2)",
+        "--card-text": "rgba(255,250,252,0.97)",
+        "--card-muted": "rgba(255,230,237,0.72)"
+    },
+    "blue-red": {
+        "--bg-top": "#101f46",
+        "--bg-mid": "#2e67d4",
+        "--bg-low": "#b63d59",
+        "--bg-deep": "#2b1322",
+        "--card-bg-1": "rgba(255,255,255,0.14)",
+        "--card-bg-2": "rgba(113,163,255,0.12)",
+        "--card-border": "rgba(255,210,218,0.24)",
+        "--card-shadow": "0 18px 45px rgba(55, 104, 255, 0.2)",
+        "--card-text": "rgba(255,248,249,0.97)",
+        "--card-muted": "rgba(227,235,255,0.74)"
+    },
+    "purple-red": {
+        "--bg-top": "#2a1239",
+        "--bg-mid": "#6b349f",
+        "--bg-low": "#d94b66",
+        "--bg-deep": "#2d1320",
+        "--card-bg-1": "rgba(255,255,255,0.15)",
+        "--card-bg-2": "rgba(230,115,170,0.12)",
+        "--card-border": "rgba(255,220,235,0.26)",
+        "--card-shadow": "0 18px 45px rgba(153, 79, 224, 0.2)",
+        "--card-text": "rgba(255,247,250,0.97)",
+        "--card-muted": "rgba(255,228,238,0.74)"
+    },
+    "red-purple": {
+        "--bg-top": "#3d1225",
+        "--bg-mid": "#c24560",
+        "--bg-low": "#6f4bc2",
+        "--bg-deep": "#1b1630",
+        "--card-bg-1": "rgba(255,255,255,0.14)",
+        "--card-bg-2": "rgba(197,111,220,0.12)",
+        "--card-border": "rgba(255,220,240,0.26)",
+        "--card-shadow": "0 18px 45px rgba(204, 86, 126, 0.2)",
+        "--card-text": "rgba(255,247,250,0.97)",
+        "--card-muted": "rgba(255,233,243,0.72)"
+    },
+    "violet-cyan": {
+        "--bg-top": "#26153f",
+        "--bg-mid": "#4a4ae7",
+        "--bg-low": "#47d4d1",
+        "--bg-deep": "#0d1d2e",
+        "--card-bg-1": "rgba(255,255,255,0.16)",
+        "--card-bg-2": "rgba(99,203,255,0.12)",
+        "--card-border": "rgba(220,255,255,0.24)",
+        "--card-shadow": "0 18px 45px rgba(72, 94, 255, 0.2)",
+        "--card-text": "rgba(244,251,255,0.97)",
+        "--card-muted": "rgba(220,239,255,0.74)"
+    },
+    "cyan-violet": {
+        "--bg-top": "#0d1d2e",
+        "--bg-mid": "#2aa9cc",
+        "--bg-low": "#5e4bf2",
+        "--bg-deep": "#1f1038",
+        "--card-bg-1": "rgba(255,255,255,0.15)",
+        "--card-bg-2": "rgba(113,97,255,0.12)",
+        "--card-border": "rgba(214,224,255,0.24)",
+        "--card-shadow": "0 18px 45px rgba(42, 169, 204, 0.2)",
+        "--card-text": "rgba(245,249,255,0.97)",
+        "--card-muted": "rgba(220,228,255,0.74)"
+    },
+    "black": {
+        "--bg-top": "#030507",
+        "--bg-mid": "#0b0f16",
+        "--bg-low": "#121a24",
+        "--bg-deep": "#05070b",
+        "--card-bg-1": "rgba(255,255,255,0.08)",
+        "--card-bg-2": "rgba(136,150,166,0.08)",
+        "--card-border": "rgba(255,255,255,0.12)",
+        "--card-shadow": "0 18px 45px rgba(0, 0, 0, 0.46)",
+        "--card-text": "rgba(255,255,255,0.98)",
+        "--card-muted": "rgba(210,216,226,0.74)"
+    }
+};
+
+function applyTheme(themeName) {
+    const theme = GRADIENT_THEMES[themeName] || GRADIENT_THEMES["purple-blue"];
+    Object.entries(theme).forEach(([key, value]) => {
+        document.documentElement.style.setProperty(key, value);
+    });
+    localStorage.setItem(THEME_KEY, themeName);
+}
+
+window.applyTheme = applyTheme;
+
 const PARTICLE_LIMIT = 90;
 
 function setupParticles() {
@@ -32,10 +178,10 @@ function setupParticles() {
             particles.push({
                 x: Math.random() * width,
                 y: Math.random() * height,
-                radius: Math.random() * 2.2 + 0.8,
+                radius: Math.random() * 1.8 + 0.8,
                 vx: (Math.random() - 0.5) * 0.7,
-                vy: (Math.random() - 0.5) * 0.7 + 0.15,
-                alpha: Math.random() * 0.65 + 0.2
+                vy: (Math.random() - 0.5) * 0.7 + 0.12,
+                alpha: Math.random() * 0.55 + 0.15
             });
         }
     }
@@ -52,20 +198,9 @@ function setupParticles() {
             if (particle.y < -10) particle.y = height + 10;
             if (particle.y > height + 10) particle.y = -10;
 
-            const glow = ctx.createRadialGradient(
-                particle.x,
-                particle.y,
-                0,
-                particle.x,
-                particle.y,
-                particle.radius * 8
-            );
-            glow.addColorStop(0, `rgba(255,255,255,${particle.alpha})`);
-            glow.addColorStop(0.35, `rgba(169,154,255,${particle.alpha * 0.7})`);
-            glow.addColorStop(1, `rgba(169,154,255,0)`);
-            ctx.fillStyle = glow;
+            ctx.fillStyle = `rgba(255,255,255,${particle.alpha})`;
             ctx.beginPath();
-            ctx.arc(particle.x, particle.y, particle.radius * 8, 0, Math.PI * 2);
+            ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
             ctx.fill();
         });
     }
@@ -90,11 +225,18 @@ document.addEventListener('visibilitychange', () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+    const savedTheme = localStorage.getItem(THEME_KEY) || "purple-blue";
+    applyTheme(savedTheme);
     setupGlobalAIButton();
     setupParticles();
     setupScrollAnimations();
     setupCardHover();
 });
+
+window.addEventListener('pageshow', setupGlobalAIButton);
+if (document.readyState !== 'loading') {
+    setupGlobalAIButton();
+}
 
 /* =========================================
    Global AI Assistant Button
@@ -102,15 +244,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function setupGlobalAIButton() {
     const existingButton = document.getElementById('global-ai-button');
-    if (existingButton) return;
+    if (existingButton) {
+        existingButton.style.display = 'flex';
+        existingButton.style.opacity = '1';
+        existingButton.style.visibility = 'visible';
+        return;
+    }
 
     const aiButton = document.createElement('button');
     aiButton.id = 'global-ai-button';
     aiButton.className = 'ai-button';
+    aiButton.type = 'button';
     aiButton.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><text x="12" y="16" text-anchor="middle" font-size="8" fill="currentColor">AI</text></svg>';
     aiButton.title = 'AI Assistant (Alt+A)';
     aiButton.setAttribute('aria-label', 'Open AI Assistant');
-    document.body.appendChild(aiButton);
+    aiButton.style.display = 'flex';
+    aiButton.style.opacity = '1';
+    aiButton.style.visibility = 'visible';
+
+    if (document.body) {
+        document.body.appendChild(aiButton);
+    }
 
     const handleAIClick = () => {
         const currentPage = window.location.pathname;
