@@ -13,51 +13,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function drawWindowGlass(ctx, width, height, scene) {
     const config = {
-        sunrise: {
-            top: "rgba(255, 196, 132, 0.22)",
-            mid: "rgba(122, 142, 169, 0.1)",
-            bottom: "rgba(24, 31, 39, 0.18)"
-        },
-        day: {
-            top: "rgba(255,255,255,0.14)",
-            mid: "rgba(180,200,220,0.08)",
-            bottom: "rgba(12,16,22,0.12)"
-        },
-        sunset: {
-            top: "rgba(255, 166, 120, 0.2)",
-            mid: "rgba(162, 130, 110, 0.1)",
-            bottom: "rgba(26, 30, 38, 0.18)"
-        },
-        dusk: {
-            top: "rgba(148, 122, 190, 0.22)",
-            mid: "rgba(100, 117, 160, 0.1)",
-            bottom: "rgba(16, 22, 32, 0.2)"
-        },
-        night: {
-            top: "rgba(120, 138, 170, 0.18)",
-            mid: "rgba(64, 78, 98, 0.1)",
-            bottom: "rgba(8, 12, 18, 0.2)"
-        },
-        rain: {
-            top: "rgba(150, 170, 196, 0.18)",
-            mid: "rgba(90, 106, 124, 0.08)",
-            bottom: "rgba(12, 18, 26, 0.2)"
-        },
-        snowy: {
-            top: "rgba(215, 222, 232, 0.18)",
-            mid: "rgba(165, 178, 190, 0.08)",
-            bottom: "rgba(38, 46, 56, 0.18)"
-        },
-        foggy: {
-            top: "rgba(198, 205, 214, 0.12)",
-            mid: "rgba(135, 142, 150, 0.08)",
-            bottom: "rgba(24, 28, 34, 0.15)"
-        },
-        thunder: {
-            top: "rgba(104, 118, 134, 0.2)",
-            mid: "rgba(74, 86, 102, 0.08)",
-            bottom: "rgba(8, 12, 18, 0.2)"
-        }
+        sunrise: { top: "rgba(255, 196, 132, 0.26)", mid: "rgba(148, 170, 210, 0.08)", bottom: "rgba(15, 20, 29, 0.2)" },
+        day: { top: "rgba(255,255,255,0.14)", mid: "rgba(160, 180, 204, 0.08)", bottom: "rgba(12,16,22,0.12)" },
+        cloudy: { top: "rgba(210, 218, 228, 0.12)", mid: "rgba(125, 138, 152, 0.08)", bottom: "rgba(12,18,22,0.18)" },
+        sunset: { top: "rgba(255, 152, 94, 0.22)", mid: "rgba(163, 130, 104, 0.08)", bottom: "rgba(24, 28, 36, 0.2)" },
+        dusk: { top: "rgba(137, 108, 186, 0.2)", mid: "rgba(89, 104, 151, 0.08)", bottom: "rgba(12, 18, 31, 0.2)" },
+        night: { top: "rgba(118, 136, 170, 0.18)", mid: "rgba(67, 80, 98, 0.08)", bottom: "rgba(8, 12, 18, 0.22)" },
+        rain: { top: "rgba(141, 168, 191, 0.18)", mid: "rgba(86, 101, 118, 0.08)", bottom: "rgba(10, 16, 24, 0.22)" },
+        snowy: { top: "rgba(228, 234, 240, 0.2)", mid: "rgba(160, 180, 196, 0.08)", bottom: "rgba(32, 40, 50, 0.18)" },
+        foggy: { top: "rgba(200, 208, 214, 0.16)", mid: "rgba(120, 126, 136, 0.08)", bottom: "rgba(24, 30, 36, 0.18)" },
+        thunder: { top: "rgba(95, 109, 124, 0.22)", mid: "rgba(62, 74, 86, 0.08)", bottom: "rgba(5, 10, 16, 0.24)" }
     };
 
     const palette = config[scene] || config.day;
@@ -87,16 +52,15 @@ function drawWindowGlass(ctx, width, height, scene) {
         height * 0.2,
         width * 0.8
     );
-    gloss.addColorStop(0, "rgba(255,255,255,0.15)");
+    gloss.addColorStop(0, "rgba(255,255,255,0.16)");
     gloss.addColorStop(0.3, "rgba(255,255,255,0.05)");
     gloss.addColorStop(1, "rgba(255,255,255,0)");
     ctx.fillStyle = gloss;
     ctx.fillRect(0, 0, width, height);
 }
 
-
 /* =========================================
-   Background Particles
+   Background Weather System
 ========================================= */
 
 const WEATHER_MODE_KEY = "gamerxdgz_weather_mode";
@@ -115,7 +79,6 @@ function getSavedWeatherMode() {
         "foggy",
         "thunder"
     ];
-
     const saved = localStorage.getItem(WEATHER_MODE_KEY);
     return validModes.includes(saved) ? saved : "auto";
 }
@@ -135,15 +98,9 @@ window.setWeatherPreset = function setWeatherPreset(mode) {
         "thunder"
     ];
 
-    if (!validModes.includes(mode)) {
-        return;
-    }
-
-    if (mode === "auto") {
-        localStorage.removeItem(WEATHER_MODE_KEY);
-    } else {
-        localStorage.setItem(WEATHER_MODE_KEY, mode);
-    }
+    if (!validModes.includes(mode)) return;
+    if (mode === "auto") localStorage.removeItem(WEATHER_MODE_KEY);
+    else localStorage.setItem(WEATHER_MODE_KEY, mode);
 
     const weatherCanvas = document.getElementById("particles");
     if (weatherCanvas && weatherCanvas.__weatherState) {
@@ -152,9 +109,7 @@ window.setWeatherPreset = function setWeatherPreset(mode) {
 };
 
 function setupParticles() {
-
     const canvas = document.getElementById("particles");
-
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
@@ -164,26 +119,33 @@ function setupParticles() {
     let weatherMode = "day";
     let targetScene = "day";
     let sceneBlend = 1;
-    let particles = [];
+    let rainDrops = [];
+    let snowFlakes = [];
+    let cloudLayers = [];
     let lightningFlash = 0;
     let lightningTimer = 0;
+    let stars = [];
 
     canvas.width = width;
     canvas.height = height;
+
     canvas.__weatherState = {
         applyMode(mode) {
             if (mode === "auto") {
                 fetchWeather();
                 return;
             }
-
             targetScene = mode;
             weatherMode = mode;
             sceneBlend = 0;
             updateBackgroundTheme(mode);
-            buildParticles(mode);
+            buildWeather(mode);
         }
     };
+
+    function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+    }
 
     function getSceneFromWeather(code, precipitation, isDay, hour) {
         const morning = hour >= 5 && hour < 8;
@@ -195,263 +157,622 @@ function setupParticles() {
         if ([95, 96, 99].includes(code)) return "thunder";
         if ([71, 73, 75, 77, 85, 86].includes(code)) return "snowy";
         if ([45, 48].includes(code)) return "foggy";
-
-        if (precipitation > 0.5 || [61, 63, 65, 80, 81, 82, 51, 55, 56].includes(code)) {
-            return "rain";
-        }
-
-        if (morning) return "sunrise";
-        if (sunrise) return "sunrise";
+        if (precipitation > 0.5 || [61, 63, 65, 80, 81, 82, 51, 55, 56].includes(code)) return "rain";
+        if (morning || sunrise) return "sunrise";
         if (sunset) return "sunset";
         if (dusk) return "dusk";
         if (night) return "night";
         return "day";
     }
 
+    function rgbaFromRgb(r, g, b, a) {
+        return `rgba(${r}, ${g}, ${b}, ${a})`;
+    }
+
     function getSceneConfig(mode) {
         const configs = {
             sunrise: {
-                background: "linear-gradient(180deg, rgba(255, 174, 114, 0.82), rgba(35, 46, 60, 1))",
-                count: 62,
-                speedMin: 1.6,
-                speedMax: 3.2,
-                drift: 0.3,
-                lengthMin: 15,
-                lengthMax: 28,
-                widthMin: 0.9,
-                widthMax: 1.4,
-                opacityMin: 0.08,
-                opacityMax: 0.28,
-                colors: [
-                    "rgba(255, 208, 178, 0.42)",
-                    "rgba(220, 228, 240, 0.24)",
-                    "rgba(170, 188, 214, 0.2)"
-                ]
+                skyTop: [18, 28, 52],
+                skyMid: [96, 82, 123],
+                skyBottom: [255, 170, 105],
+                horizon: [255, 205, 132],
+                sun: [255, 182, 92],
+                moon: [214, 225, 255],
+                cloud: [246, 220, 205],
+                cloudShade: [145, 137, 162],
+                rain: [188, 211, 232],
+                fog: [245, 222, 197],
+                ambient: 0.8,
+                cloudOpacity: 0.72,
+                fogOpacity: 0.18,
+                daylight: 0.78,
+                rainDensity: 0.4,
+                lightning: 0.14
             },
             day: {
-                background: "linear-gradient(180deg, rgba(90, 106, 123, 0.9), rgba(17, 22, 30, 1))",
-                count: 52,
-                speedMin: 1.2,
-                speedMax: 2.8,
-                drift: 0.22,
-                lengthMin: 12,
-                lengthMax: 22,
-                widthMin: 0.8,
-                widthMax: 1.2,
-                opacityMin: 0.05,
-                opacityMax: 0.2,
-                colors: [
-                    "rgba(206, 220, 239, 0.28)",
-                    "rgba(176, 192, 212, 0.22)",
-                    "rgba(150, 170, 193, 0.18)"
-                ]
+                skyTop: [36, 68, 116],
+                skyMid: [125, 165, 204],
+                skyBottom: [214, 230, 245],
+                horizon: [240, 245, 255],
+                sun: [255, 220, 120],
+                moon: [205, 220, 255],
+                cloud: [255, 255, 255],
+                cloudShade: [189, 197, 210],
+                rain: [200, 220, 235],
+                fog: [232, 238, 245],
+                ambient: 1,
+                cloudOpacity: 0.75,
+                fogOpacity: 0.12,
+                daylight: 1,
+                rainDensity: 0.2,
+                lightning: 0.05
             },
             cloudy: {
-                background: "linear-gradient(180deg, rgba(106, 116, 128, 0.9), rgba(18, 22, 28, 1))",
-                count: 80,
-                speedMin: 1.1,
-                speedMax: 2.5,
-                drift: 0.18,
-                lengthMin: 11,
-                lengthMax: 20,
-                widthMin: 0.7,
-                widthMax: 1.1,
-                opacityMin: 0.06,
-                opacityMax: 0.18,
-                colors: [
-                    "rgba(210, 221, 232, 0.26)",
-                    "rgba(191, 201, 214, 0.2)",
-                    "rgba(162, 175, 188, 0.16)"
-                ]
+                skyTop: [44, 52, 66],
+                skyMid: [118, 131, 149],
+                skyBottom: [182, 195, 207],
+                horizon: [219, 224, 230],
+                sun: [244, 229, 196],
+                moon: [210, 223, 240],
+                cloud: [222, 229, 236],
+                cloudShade: [163, 172, 183],
+                rain: [182, 196, 210],
+                fog: [220, 226, 232],
+                ambient: 0.75,
+                cloudOpacity: 0.62,
+                fogOpacity: 0.14,
+                daylight: 0.72,
+                rainDensity: 0.12,
+                lightning: 0.08
             },
             sunset: {
-                background: "linear-gradient(180deg, rgba(255, 136, 84, 0.9), rgba(24, 32, 42, 1))",
-                count: 68,
-                speedMin: 1.8,
-                speedMax: 3.4,
-                drift: 0.3,
-                lengthMin: 14,
-                lengthMax: 26,
-                widthMin: 0.9,
-                widthMax: 1.3,
-                opacityMin: 0.07,
-                opacityMax: 0.25,
-                colors: [
-                    "rgba(255, 196, 148, 0.42)",
-                    "rgba(200, 198, 214, 0.24)",
-                    "rgba(153, 164, 190, 0.18)"
-                ]
+                skyTop: [30, 28, 48],
+                skyMid: [120, 68, 92],
+                skyBottom: [255, 135, 75],
+                horizon: [255, 200, 128],
+                sun: [255, 144, 68],
+                moon: [201, 214, 255],
+                cloud: [255, 205, 160],
+                cloudShade: [147, 90, 90],
+                rain: [205, 216, 234],
+                fog: [255, 181, 142],
+                ambient: 0.82,
+                cloudOpacity: 0.7,
+                fogOpacity: 0.2,
+                daylight: 0.66,
+                rainDensity: 0.25,
+                lightning: 0.1
             },
             dusk: {
-                background: "linear-gradient(180deg, rgba(122, 104, 172, 0.82), rgba(16, 20, 30, 1))",
-                count: 64,
-                speedMin: 1.6,
-                speedMax: 3.1,
-                drift: 0.26,
-                lengthMin: 13,
-                lengthMax: 24,
-                widthMin: 0.8,
-                widthMax: 1.2,
-                opacityMin: 0.07,
-                opacityMax: 0.24,
-                colors: [
-                    "rgba(218, 220, 244, 0.32)",
-                    "rgba(170, 186, 214, 0.22)",
-                    "rgba(136, 150, 182, 0.18)"
-                ]
+                skyTop: [18, 24, 46],
+                skyMid: [70, 72, 125],
+                skyBottom: [140, 118, 177],
+                horizon: [196, 154, 224],
+                sun: [174, 148, 255],
+                moon: [205, 220, 255],
+                cloud: [216, 220, 246],
+                cloudShade: [116, 112, 152],
+                rain: [166, 183, 214],
+                fog: [186, 177, 217],
+                ambient: 0.62,
+                cloudOpacity: 0.7,
+                fogOpacity: 0.18,
+                daylight: 0.42,
+                rainDensity: 0.18,
+                lightning: 0.08
             },
             night: {
-                background: "linear-gradient(180deg, rgba(26, 36, 48, 1), rgba(4, 8, 12, 1))",
-                count: 54,
-                speedMin: 1.0,
-                speedMax: 2.2,
-                drift: 0.15,
-                lengthMin: 10,
-                lengthMax: 18,
-                widthMin: 0.7,
-                widthMax: 1.0,
-                opacityMin: 0.05,
-                opacityMax: 0.18,
-                colors: [
-                    "rgba(188, 208, 228, 0.22)",
-                    "rgba(140, 160, 182, 0.18)",
-                    "rgba(112, 128, 148, 0.14)"
-                ]
+                skyTop: [3, 9, 18],
+                skyMid: [23, 36, 57],
+                skyBottom: [64, 74, 112],
+                horizon: [105, 119, 170],
+                sun: [204, 219, 255],
+                moon: [236, 243, 255],
+                cloud: [190, 206, 227],
+                cloudShade: [103, 116, 148],
+                rain: [170, 180, 205],
+                fog: [151, 170, 206],
+                ambient: 0.28,
+                cloudOpacity: 0.46,
+                fogOpacity: 0.16,
+                daylight: 0.14,
+                rainDensity: 0.1,
+                lightning: 0.12
             },
             rain: {
-                background: "linear-gradient(180deg, rgba(54, 68, 82, 0.96), rgba(8, 14, 20, 1))",
-                count: 170,
-                speedMin: 3.0,
-                speedMax: 5.8,
-                drift: 0.5,
-                lengthMin: 20,
-                lengthMax: 42,
-                widthMin: 0.9,
-                widthMax: 1.7,
-                opacityMin: 0.12,
-                opacityMax: 0.42,
-                colors: [
-                    "rgba(214, 228, 240, 0.9)",
-                    "rgba(186, 203, 220, 0.78)",
-                    "rgba(155, 174, 194, 0.68)"
-                ]
+                skyTop: [25, 37, 52],
+                skyMid: [56, 70, 88],
+                skyBottom: [23, 32, 42],
+                horizon: [118, 138, 164],
+                sun: [179, 201, 223],
+                moon: [210, 224, 242],
+                cloud: [186, 198, 214],
+                cloudShade: [86, 100, 116],
+                rain: [182, 204, 224],
+                fog: [155, 171, 186],
+                ambient: 0.48,
+                cloudOpacity: 0.76,
+                fogOpacity: 0.34,
+                daylight: 0.42,
+                rainDensity: 0.82,
+                lightning: 0.06
             },
             snowy: {
-                background: "linear-gradient(180deg, rgba(205, 218, 230, 0.85), rgba(96, 110, 128, 1))",
-                count: 100,
-                speedMin: 0.9,
-                speedMax: 2.2,
-                drift: 0.2,
-                lengthMin: 10,
-                lengthMax: 20,
-                widthMin: 0.8,
-                widthMax: 1.3,
-                opacityMin: 0.1,
-                opacityMax: 0.32,
-                colors: [
-                    "rgba(255,255,255,0.9)",
-                    "rgba(238,244,250,0.8)",
-                    "rgba(203,219,234,0.7)"
-                ]
+                skyTop: [150, 172, 190],
+                skyMid: [190, 206, 220],
+                skyBottom: [228, 236, 242],
+                horizon: [242, 246, 250],
+                sun: [249, 253, 255],
+                moon: [227, 235, 245],
+                cloud: [242, 247, 250],
+                cloudShade: [176, 186, 196],
+                rain: [229, 238, 246],
+                fog: [234, 239, 245],
+                ambient: 0.7,
+                cloudOpacity: 0.8,
+                fogOpacity: 0.22,
+                daylight: 0.7,
+                rainDensity: 0.18,
+                lightning: 0.03
             },
             foggy: {
-                background: "linear-gradient(180deg, rgba(125, 132, 138, 0.9), rgba(28, 32, 36, 1))",
-                count: 52,
-                speedMin: 0.7,
-                speedMax: 1.7,
-                drift: 0.12,
-                lengthMin: 8,
-                lengthMax: 18,
-                widthMin: 0.7,
-                widthMax: 1.0,
-                opacityMin: 0.03,
-                opacityMax: 0.14,
-                colors: [
-                    "rgba(228,235,240,0.18)",
-                    "rgba(196,203,212,0.15)",
-                    "rgba(170,180,190,0.12)"
-                ]
+                skyTop: [101, 108, 116],
+                skyMid: [151, 158, 167],
+                skyBottom: [193, 201, 208],
+                horizon: [207, 215, 221],
+                sun: [221, 232, 242],
+                moon: [220, 228, 238],
+                cloud: [219, 225, 232],
+                cloudShade: [145, 150, 159],
+                rain: [204, 216, 225],
+                fog: [209, 218, 224],
+                ambient: 0.54,
+                cloudOpacity: 0.65,
+                fogOpacity: 0.48,
+                daylight: 0.54,
+                rainDensity: 0.04,
+                lightning: 0.04
             },
             thunder: {
-                background: "linear-gradient(180deg, rgba(20, 25, 32, 1), rgba(6, 10, 16, 1))",
-                count: 200,
-                speedMin: 3.5,
-                speedMax: 6.2,
-                drift: 0.5,
-                lengthMin: 24,
-                lengthMax: 48,
-                widthMin: 1.1,
-                widthMax: 1.9,
-                opacityMin: 0.14,
-                opacityMax: 0.5,
-                colors: [
-                    "rgba(210, 220, 232, 0.88)",
-                    "rgba(176, 193, 208, 0.76)",
-                    "rgba(129, 142, 158, 0.72)"
-                ]
+                skyTop: [10, 16, 20],
+                skyMid: [40, 48, 60],
+                skyBottom: [26, 30, 36],
+                horizon: [102, 115, 132],
+                sun: [182, 197, 215],
+                moon: [196, 208, 226],
+                cloud: [126, 136, 145],
+                cloudShade: [48, 56, 62],
+                rain: [176, 195, 214],
+                fog: [102, 112, 122],
+                ambient: 0.26,
+                cloudOpacity: 0.95,
+                fogOpacity: 0.38,
+                daylight: 0.2,
+                rainDensity: 1,
+                lightning: 0.72
             }
         };
-
         return configs[mode] || configs.day;
     }
 
     function updateBackgroundTheme(mode) {
         const config = getSceneConfig(mode);
-        document.body.style.background = config.background;
+        document.body.style.background = `linear-gradient(180deg, rgba(${config.skyTop[0]}, ${config.skyTop[1]}, ${config.skyTop[2]}, 0.98), rgba(${config.skyBottom[0]}, ${config.skyBottom[1]}, ${config.skyBottom[2]}, 1))`;
     }
 
-    function buildParticles(mode) {
-        const config = getSceneConfig(mode);
-        particles = [];
+    function randomBetween(min, max) {
+        return min + Math.random() * (max - min);
+    }
 
-        for (let i = 0; i < config.count; i++) {
-            particles.push({
-                x: Math.random() * width,
-                y: Math.random() * height,
-                length: Math.random() * (config.lengthMax - config.lengthMin) + config.lengthMin,
-                width: Math.random() * (config.widthMax - config.widthMin) + config.widthMin,
-                speedX: (Math.random() - 0.5) * config.drift,
-                speedY: Math.random() * (config.speedMax - config.speedMin) + config.speedMin,
-                opacity: Math.random() * (config.opacityMax - config.opacityMin) + config.opacityMin,
-                color: config.colors[Math.floor(Math.random() * config.colors.length)],
-                sway: Math.random() * Math.PI * 2
+    function createCloudFormation(mode, layerIndex, width, height) {
+        const weatherProfile = {
+            sunrise: { low: 5, mid: 4, high: 3, alpha: [0.14, 0.28], spread: [0.12, 0.34], base: [90, 170], height: [18, 50] },
+            day: { low: 6, mid: 5, high: 4, alpha: [0.12, 0.2], spread: [0.08, 0.24], base: [110, 220], height: [16, 44] },
+            cloudy: { low: 8, mid: 6, high: 4, alpha: [0.12, 0.24], spread: [0.12, 0.3], base: [140, 260], height: [18, 52] },
+            sunset: { low: 6, mid: 5, high: 3, alpha: [0.15, 0.28], spread: [0.14, 0.36], base: [110, 210], height: [18, 48] },
+            dusk: { low: 5, mid: 5, high: 4, alpha: [0.12, 0.22], spread: [0.1, 0.3], base: [100, 200], height: [16, 44] },
+            night: { low: 4, mid: 4, high: 5, alpha: [0.08, 0.18], spread: [0.08, 0.22], base: [70, 170], height: [14, 36] },
+            rain: { low: 9, mid: 6, high: 5, alpha: [0.15, 0.32], spread: [0.18, 0.42], base: [150, 290], height: [22, 58] },
+            snowy: { low: 6, mid: 5, high: 4, alpha: [0.12, 0.22], spread: [0.1, 0.26], base: [90, 200], height: [18, 46] },
+            foggy: { low: 4, mid: 4, high: 3, alpha: [0.08, 0.18], spread: [0.08, 0.2], base: [70, 150], height: [14, 36] },
+            thunder: { low: 10, mid: 7, high: 4, alpha: [0.17, 0.36], spread: [0.2, 0.52], base: [180, 330], height: [26, 62] }
+        }[mode] || { low: 6, mid: 5, high: 4, alpha: [0.12, 0.2], spread: [0.08, 0.24], base: [110, 220], height: [16, 44] };
+
+        const layerType = layerIndex <= 1 ? "high" : layerIndex === 2 ? "mid" : "low";
+        const tier = layerType === "low" ? 0 : layerType === "mid" ? 1 : 2;
+        const baseSize = randomBetween(weatherProfile.base[0], weatherProfile.base[1]);
+        const cloudHeight = randomBetween(weatherProfile.height[0], weatherProfile.height[1]);
+        const x = randomBetween(-width * 0.35, width * 1.25);
+        const y = height * (0.14 + layerIndex * 0.12 + Math.random() * 0.12) + randomBetween(-22, 26);
+        const speed = randomBetween(0.15, 0.9) * (tier === 0 ? 1.6 : tier === 1 ? 1.15 : 0.8) * (mode === "thunder" ? 1.3 : 1);
+        const direction = Math.random() > 0.5 ? 1 : -1;
+        const alpha = randomBetween(weatherProfile.alpha[0], weatherProfile.alpha[1]);
+        const density = randomBetween(0.55, 1.25);
+        const lobeCount = Math.min(10, Math.max(4, Math.round(weatherProfile.low + randomBetween(-1.5, 2.5) + tier * 1.4)));
+        const lobes = [];
+
+        for (let i = 0; i < lobeCount; i++) {
+            const offset = (i / lobeCount) * 2 - 1;
+            const rx = baseSize * randomBetween(0.52, 1.12) * (0.85 + density * 0.2);
+            const ry = cloudHeight * randomBetween(0.8, 1.6) * (0.65 + density * 0.25);
+            const xOffset = offset * baseSize * randomBetween(0.2, 0.82) + randomBetween(-25, 25);
+            const yOffset = randomBetween(-ry * 0.5, ry * 0.44) + (tier === 0 ? -6 : 0);
+            lobes.push({
+                x: xOffset,
+                y: yOffset,
+                rx,
+                ry,
+                rot: randomBetween(-0.5, 0.7),
+                shade: randomBetween(0.7, 1.2),
+                brightness: randomBetween(0.78, 1.35)
             });
         }
+
+        return {
+            x,
+            y,
+            width: baseSize * 1.4,
+            height: cloudHeight,
+            alpha,
+            speed,
+            direction,
+            baseAlpha: alpha,
+            density,
+            layerIndex,
+            lobeCount,
+            seed: Math.random() * 1000,
+            drift: randomBetween(0.15, 1.7),
+            lobes,
+            shadowBias: randomBetween(0.2, 0.9),
+            sunlightBias: randomBetween(0.15, 0.8),
+            movementPhase: Math.random() * Math.PI * 2,
+            cloudType: ["scattered", "broad", "cumulus", "bank"][Math.floor(Math.random() * 4)]
+        };
     }
 
-    function setSceneForWeather(code, precipitation = 0, isDay = true, time = 12) {
-        const scene = getSceneFromWeather(code, precipitation, isDay, time);
-        targetScene = scene;
-        weatherMode = scene;
-        sceneBlend = 0;
-        updateBackgroundTheme(scene);
-        buildParticles(scene);
+    function buildWeather(mode) {
+        const total = clamp(Math.round((width * height) / 18), 40, 220);
+
+        rainDrops = [];
+        snowFlakes = [];
+        cloudLayers = [];
+        stars = [];
+
+        if (mode === "rain" || mode === "thunder") {
+            const rainCount = mode === "thunder" ? total + 70 : total;
+            for (let i = 0; i < rainCount; i++) {
+                rainDrops.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    z: Math.random() * 1 + 0.2,
+                    len: 8 + Math.random() * 16,
+                    speed: 8 + Math.random() * 22,
+                    opacity: 0.25 + Math.random() * 0.6,
+                    drift: (Math.random() - 0.5) * 1.2,
+                    width: 0.7 + Math.random() * 1.4
+                });
+            }
+        }
+
+        if (mode === "snowy") {
+            const snowCount = total + 40;
+            for (let i = 0; i < snowCount; i++) {
+                snowFlakes.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    r: 1 + Math.random() * 3.2,
+                    speed: 0.6 + Math.random() * 1.4,
+                    drift: (Math.random() - 0.5) * 1.8,
+                    opacity: 0.35 + Math.random() * 0.65,
+                    twinkle: Math.random() * Math.PI * 2
+                });
+            }
+        }
+
+        if (["cloudy", "sunrise", "sunset", "dusk", "rain", "foggy", "thunder", "day", "night"].includes(mode)) {
+            const layerCount = mode === "thunder" ? 5 : mode === "rain" ? 4 : 3;
+            const desiredClouds = mode === "thunder" ? 26 : mode === "rain" ? 22 : mode === "cloudy" ? 18 : 12;
+
+            for (let layer = 0; layer < layerCount; layer++) {
+                const cloudCount = Math.max(4, Math.round(desiredClouds / (layerCount - layer + 1)) + Math.random() * 5);
+                for (let i = 0; i < cloudCount; i++) {
+                    cloudLayers.push(createCloudFormation(mode, layer, width, height));
+                }
+            }
+        }
+
+        if (mode === "night") {
+            const starCount = clamp(Math.round(width * height / 18), 100, 400);
+            for (let i = 0; i < starCount; i++) {
+                stars.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height * 0.6,
+                    r: 0.7 + Math.random() * 2.4,
+                    alpha: 0.2 + Math.random() * 0.8,
+                    twinkle: Math.random() * Math.PI * 2
+                });
+            }
+        }
     }
 
-    function drawAtmosphere() {
-        if (["cloudy", "rain", "foggy", "thunder"].includes(weatherMode)) {
-            const cloudCount = weatherMode === "thunder" ? 7 : weatherMode === "rain" ? 8 : 5;
+    function drawStars() {
+        if (weatherMode !== "night" && weatherMode !== "dusk") return;
+        stars.forEach(star => {
+            const twinkle = 0.45 + Math.sin((performance.now() * 0.001) + star.twinkle) * 0.55;
+            ctx.beginPath();
+            ctx.fillStyle = `rgba(255,255,255,${star.alpha * twinkle})`;
+            ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+            ctx.fill();
+        });
+    }
 
-            for (let i = 0; i < cloudCount; i++) {
-                const y = (height / (cloudCount + 1)) * (i + 1) + Math.sin((i + 1) * 1.2) * 20;
-                const x = ((i + 1) * width) / (cloudCount + 1);
-                const cloudAlpha = weatherMode === "foggy" ? 0.08 : weatherMode === "thunder" ? 0.12 : 0.1;
-                ctx.fillStyle = `rgba(220, 232, 240, ${cloudAlpha})`;
+    function drawSunMoon(scene) {
+        const config = getSceneConfig(scene);
+        const timeRatio = weatherMode === "night" ? 0.15 : weatherMode === "dusk" ? 0.32 : weatherMode === "sunset" ? 0.55 : weatherMode === "sunrise" ? 0.4 : weatherMode === "rain" ? 0.26 : 0.7;
+        const sunX = width * (0.18 + timeRatio * 0.64);
+        const sunY = height * (0.26 + Math.sin(timeRatio * Math.PI) * 0.18);
+
+        const glowSize = Math.min(width, height) * 0.22;
+        ctx.save();
+
+        const glow = ctx.createRadialGradient(sunX, sunY, 8, sunX, sunY, glowSize);
+        glow.addColorStop(0, rgbaFromRgb(config.sun[0], config.sun[1], config.sun[2], 0.85));
+        glow.addColorStop(0.25, rgbaFromRgb(config.sun[0], config.sun[1], config.sun[2], 0.36));
+        glow.addColorStop(0.55, rgbaFromRgb(config.sun[0], config.sun[1], config.sun[2], 0.12));
+        glow.addColorStop(1, rgbaFromRgb(config.sun[0], config.sun[1], config.sun[2], 0));
+        ctx.fillStyle = glow;
+        ctx.fillRect(0, 0, width, height);
+
+        if (scene !== "night") {
+            ctx.beginPath();
+            ctx.fillStyle = rgbaFromRgb(config.sun[0], config.sun[1], config.sun[2], 0.95);
+            ctx.arc(sunX, sunY, 18, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.fillStyle = rgbaFromRgb(config.sun[0], config.sun[1], config.sun[2], 0.18);
+            ctx.arc(sunX, sunY, 38 + glowSize * 0.08, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        if (scene === "night" || scene === "dusk") {
+            const moonX = width * 0.76;
+            const moonY = height * 0.22;
+            const moonGlow = ctx.createRadialGradient(moonX, moonY, 12, moonX, moonY, 90);
+            moonGlow.addColorStop(0, rgbaFromRgb(config.moon[0], config.moon[1], config.moon[2], 0.95));
+            moonGlow.addColorStop(0.25, rgbaFromRgb(config.moon[0], config.moon[1], config.moon[2], 0.35));
+            moonGlow.addColorStop(1, rgbaFromRgb(config.moon[0], config.moon[1], config.moon[2], 0));
+            ctx.fillStyle = moonGlow;
+            ctx.fillRect(0, 0, width, height);
+
+            ctx.beginPath();
+            ctx.fillStyle = rgbaFromRgb(config.moon[0], config.moon[1], config.moon[2], 0.9);
+            ctx.arc(moonX, moonY, 18, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.fillStyle = "rgba(35,45,58,0.12)";
+            ctx.arc(moonX - 6, moonY - 2, 16, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        ctx.restore();
+    }
+
+    function respawnCloud(layer, mode) {
+        const next = createCloudFormation(mode, layer.layerIndex, width, height);
+        Object.assign(layer, next);
+    }
+
+    function drawCloudLayer(layer) {
+        const config = getSceneConfig(weatherMode);
+        const t = performance.now() * 0.00055;
+        layer.x += layer.speed * layer.direction * 0.28;
+        layer.y += Math.sin(t * 4 + layer.seed) * 0.12;
+
+        const cloudX = layer.x;
+        const cloudY = layer.y + Math.sin(t * 2.2 + layer.seed) * (8 + layer.layerIndex * 5) + Math.cos((t * 1.5) + layer.seed * 0.7) * 6;
+        const timeRatio = weatherMode === "night" ? 0.15 : weatherMode === "dusk" ? 0.32 : weatherMode === "sunset" ? 0.55 : weatherMode === "sunrise" ? 0.4 : weatherMode === "rain" ? 0.26 : 0.7;
+        const sunX = width * (0.18 + timeRatio * 0.64);
+        const sunY = height * (0.26 + Math.sin(timeRatio * Math.PI) * 0.18);
+
+        if (cloudX > width + 260 || cloudX < -260) {
+            respawnCloud(layer, weatherMode);
+            return;
+        }
+
+        ctx.save();
+        ctx.translate(cloudX, cloudY);
+        ctx.filter = "blur(0.8px)";
+        ctx.globalAlpha = clamp(config.cloudOpacity * layer.baseAlpha * (0.72 + layer.layerIndex * 0.22), 0.08, 0.82);
+
+        const cloudGradient = ctx.createRadialGradient(
+            (sunX - cloudX) * 0.35,
+            (sunY - cloudY) * 0.15,
+            20,
+            0,
+            0,
+            Math.max(layer.width, 110)
+        );
+        cloudGradient.addColorStop(0, rgbaFromRgb(config.cloud[0], config.cloud[1], config.cloud[2], 0.95));
+        cloudGradient.addColorStop(0.38, rgbaFromRgb(config.cloud[0], config.cloud[1], config.cloud[2], 0.8));
+        cloudGradient.addColorStop(0.72, rgbaFromRgb(config.cloudShade[0], config.cloudShade[1], config.cloudShade[2], 0.6));
+        cloudGradient.addColorStop(1, rgbaFromRgb(config.cloudShade[0], config.cloudShade[1], config.cloudShade[2], 0.08));
+
+        ctx.beginPath();
+        layer.lobes.forEach(lobe => {
+            ctx.ellipse(lobe.x, lobe.y, lobe.rx, lobe.ry, lobe.rot, 0, Math.PI * 2);
+        });
+        ctx.closePath();
+        ctx.fillStyle = cloudGradient;
+        ctx.fill();
+
+        ctx.globalAlpha = clamp(layer.baseAlpha * 0.6, 0.08, 0.44);
+        ctx.fillStyle = rgbaFromRgb(config.cloudShade[0], config.cloudShade[1], config.cloudShade[2], 0.35);
+        ctx.beginPath();
+        layer.lobes.forEach(lobe => {
+            ctx.ellipse(lobe.x + lobe.rx * 0.1, lobe.y + lobe.ry * 0.18, Math.max(12, lobe.rx * 0.38), Math.max(8, lobe.ry * 0.38), lobe.rot, 0, Math.PI * 2);
+        });
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.restore();
+    }
+
+    function drawSky() {
+        const config = getSceneConfig(weatherMode);
+        const top = config.skyTop;
+        const mid = config.skyMid;
+        const bottom = config.skyBottom;
+
+        const sky = ctx.createLinearGradient(0, 0, 0, height);
+        sky.addColorStop(0, rgbaFromRgb(top[0], top[1], top[2], 1));
+        sky.addColorStop(0.42, rgbaFromRgb(mid[0], mid[1], mid[2], 0.92));
+        sky.addColorStop(0.85, rgbaFromRgb(bottom[0], bottom[1], bottom[2], 0.8));
+        sky.addColorStop(1, rgbaFromRgb(18, 22, 28, 1));
+        ctx.fillStyle = sky;
+        ctx.fillRect(0, 0, width, height);
+
+        const horizonGlow = ctx.createRadialGradient(width * 0.5, height * 0.86, 20, width * 0.5, height * 0.9, width * 0.7);
+        horizonGlow.addColorStop(0, rgbaFromRgb(config.horizon[0], config.horizon[1], config.horizon[2], 0.28));
+        horizonGlow.addColorStop(0.45, rgbaFromRgb(config.horizon[0], config.horizon[1], config.horizon[2], 0.12));
+        horizonGlow.addColorStop(1, rgbaFromRgb(config.horizon[0], config.horizon[1], config.horizon[2], 0));
+        ctx.fillStyle = horizonGlow;
+        ctx.fillRect(0, 0, width, height);
+
+        drawStars();
+        drawSunMoon(weatherMode);
+
+        if (cloudLayers.length > 0) {
+            cloudLayers.forEach(drawCloudLayer);
+        }
+    }
+
+    function drawRain() {
+        if (!rainDrops.length) return;
+        const config = getSceneConfig(weatherMode);
+
+        rainDrops.forEach(drop => {
+            const x = drop.x;
+            const y = drop.y;
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x + drop.drift * 4, y + drop.len);
+            ctx.strokeStyle = rgbaFromRgb(config.rain[0], config.rain[1], config.rain[2], drop.opacity);
+            ctx.lineWidth = drop.width;
+            ctx.stroke();
+        });
+
+        rainDrops.forEach(drop => {
+            drop.y += drop.speed * (0.7 + drop.z);
+            drop.x += drop.drift * (0.6 + drop.z);
+            if (drop.y > height + 20) {
+                drop.y = -20;
+                drop.x = Math.random() * width;
+            }
+            if (drop.x < -20) drop.x = width + 20;
+            if (drop.x > width + 20) drop.x = -20;
+        });
+    }
+
+    function drawSnow() {
+        if (!snowFlakes.length) return;
+        snowFlakes.forEach(flake => {
+            const twinkle = 0.3 + (Math.sin((performance.now() * 0.0025) + flake.twinkle) + 1) * 0.35;
+            ctx.beginPath();
+            ctx.fillStyle = `rgba(255,255,255,${flake.opacity * twinkle})`;
+            ctx.arc(flake.x, flake.y, flake.r, 0, Math.PI * 2);
+            ctx.fill();
+        });
+
+        snowFlakes.forEach(flake => {
+            flake.y += flake.speed;
+            flake.x += flake.drift;
+            if (flake.y > height + 10) {
+                flake.y = -10;
+                flake.x = Math.random() * width;
+            }
+            if (flake.x < -10) flake.x = width + 10;
+            if (flake.x > width + 10) flake.x = -10;
+        });
+    }
+
+    function drawFog() {
+        if (weatherMode !== "foggy" && weatherMode !== "rain" && weatherMode !== "thunder") return;
+        const alpha = weatherMode === "thunder" ? 0.18 : weatherMode === "rain" ? 0.12 : 0.16;
+        const config = getSceneConfig(weatherMode);
+        for (let i = 0; i < 6; i++) {
+            const bandY = (height / 6) * i + Math.sin(i * 1.4 + performance.now() * 0.0003) * 30;
+            ctx.fillStyle = rgbaFromRgb(config.fog[0], config.fog[1], config.fog[2], alpha);
+            ctx.fillRect(0, bandY, width, height * 0.12);
+        }
+    }
+
+    function drawLightning() {
+        if (weatherMode !== "thunder") return;
+        lightningTimer -= 1;
+        if (lightningTimer <= 0) {
+            lightningTimer = Math.random() * 90 + 35;
+            lightningFlash = 1;
+        }
+
+        if (lightningFlash > 0) {
+            lightningFlash -= 0.12;
+            const flashAlpha = 0.08 + lightningFlash * 0.52;
+            ctx.fillStyle = `rgba(255,255,255,${flashAlpha})`;
+            ctx.fillRect(0, 0, width, height);
+        }
+
+        if (Math.random() < 0.18 && lightningFlash < 0.2) {
+            lightningFlash = 1;
+        }
+
+        if (lightningFlash > 0.6 && Math.random() < 0.2) {
+            const startX = Math.random() * width;
+            const startY = Math.random() * height * 0.4;
+            const endX = startX + (Math.random() - 0.5) * 180;
+            const endY = startY + 180 + Math.random() * 220;
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            ctx.lineTo(endX, endY);
+            ctx.lineWidth = 2 + Math.random() * 4;
+            ctx.strokeStyle = `rgba(255,255,255,${0.3 + lightningFlash * 0.5})`;
+            ctx.stroke();
+
+            for (let i = 0; i < 3; i++) {
+                const branchX = startX + (Math.random() - 0.5) * 90;
+                const branchY = startY + 50 + Math.random() * 120;
                 ctx.beginPath();
-                ctx.ellipse(x, y, width * 0.18 + i * 16, 26 + i * 3, 0, 0, Math.PI * 2);
-                ctx.ellipse(x + 110, y + 12, width * 0.11 + i * 12, 22, 0, 0, Math.PI * 2);
-                ctx.ellipse(x - 90, y + 8, width * 0.12 + i * 12, 18, 0, 0, Math.PI * 2);
-                ctx.fill();
+                ctx.moveTo(endX, endY);
+                ctx.lineTo(branchX, branchY);
+                ctx.strokeStyle = `rgba(255,255,255,${0.2 + lightningFlash * 0.35})`;
+                ctx.stroke();
             }
+        }
+    }
+
+    function renderFrame() {
+        ctx.clearRect(0, 0, width, height);
+
+        if (targetScene !== weatherMode) {
+            sceneBlend = clamp(sceneBlend + 0.025, 0, 1);
+            if (sceneBlend >= 1) {
+                weatherMode = targetScene;
+                sceneBlend = 1;
+            }
+        } else {
+            sceneBlend = 1;
         }
 
-        if (weatherMode === "foggy") {
-            for (let i = 0; i < 5; i++) {
-                const bandY = (height / 5) * i + Math.sin(i * 1.7) * 18;
-                ctx.fillStyle = "rgba(210, 220, 228, 0.06)";
-                ctx.fillRect(0, bandY, width, height * 0.09);
-            }
-        }
+        const activeScene = targetScene === weatherMode ? weatherMode : weatherMode;
+        drawWindowGlass(ctx, width, height, activeScene);
+        drawSky();
+        drawRain();
+        drawSnow();
+        drawFog();
+        drawLightning();
+
+        ctx.globalAlpha = 1;
+        requestAnimationFrame(renderFrame);
     }
 
     async function fetchWeather() {
@@ -461,7 +782,7 @@ function setupParticles() {
             weatherMode = savedMode;
             sceneBlend = 1;
             updateBackgroundTheme(savedMode);
-            buildParticles(savedMode);
+            buildWeather(savedMode);
             return;
         }
 
@@ -480,26 +801,33 @@ function setupParticles() {
                 latitude = position.coords.latitude;
                 longitude = position.coords.longitude;
             } catch {
-                // Fallback to New York.
+                // fallback to New York
             }
         }
 
         try {
             const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=weather_code,precipitation,is_day&timezone=auto`;
             const response = await fetch(url, { mode: "cors" });
-
-            if (!response.ok) {
-                throw new Error("Weather lookup failed");
-            }
+            if (!response.ok) throw new Error("Weather lookup failed");
 
             const data = await response.json();
             const code = Number(data.current?.weather_code ?? 0);
             const precipitation = Number(data.current?.precipitation ?? 0);
             const isDay = Number(data.current?.is_day ?? 1) === 1;
             const hour = new Date().getHours();
-            setSceneForWeather(code, precipitation, isDay, hour);
+            const nextScene = getSceneFromWeather(code, precipitation, isDay, hour);
+            targetScene = nextScene;
+            weatherMode = nextScene;
+            sceneBlend = 1;
+            updateBackgroundTheme(nextScene);
+            buildWeather(nextScene);
         } catch {
-            setSceneForWeather(0, 0, true, new Date().getHours());
+            const fallbackScene = getSceneFromWeather(0, 0, true, new Date().getHours());
+            targetScene = fallbackScene;
+            weatherMode = fallbackScene;
+            sceneBlend = 1;
+            updateBackgroundTheme(fallbackScene);
+            buildWeather(fallbackScene);
         }
     }
 
@@ -508,85 +836,21 @@ function setupParticles() {
         height = window.innerHeight;
         canvas.width = width;
         canvas.height = height;
-        buildParticles(weatherMode);
+        buildWeather(weatherMode);
     });
-
-    function animate() {
-        ctx.clearRect(0, 0, width, height);
-
-        if (targetScene !== weatherMode) {
-            sceneBlend = Math.min(sceneBlend + 0.035, 1);
-            if (sceneBlend >= 1) {
-                weatherMode = targetScene;
-                sceneBlend = 1;
-            }
-        }
-
-        const effectiveScene = sceneBlend < 1 && targetScene !== weatherMode
-            ? weatherMode
-            : targetScene;
-
-        drawWindowGlass(ctx, width, height, effectiveScene);
-        drawAtmosphere();
-
-        if (weatherMode === "thunder") {
-            lightningTimer -= 1;
-            if (lightningTimer <= 0) {
-                lightningTimer = Math.random() * 55 + 25;
-                lightningFlash = 1;
-            }
-
-            if (lightningFlash > 0) {
-                lightningFlash -= 0.12;
-                const flashAlpha = 0.08 + lightningFlash * 0.32;
-                ctx.fillStyle = `rgba(255,255,255,${flashAlpha})`;
-                ctx.fillRect(0, 0, width, height);
-            }
-
-            if (Math.random() < 0.13) {
-                lightningFlash = Math.max(lightningFlash, 0.9);
-            }
-        }
-
-        particles.forEach(particle => {
-            particle.x += particle.speedX + Math.sin((particle.y + particle.sway) * 0.03) * 0.3;
-            particle.y += particle.speedY + Math.cos((particle.x + particle.sway) * 0.02) * 0.22;
-            particle.sway += 0.035;
-
-            if (particle.x < -35) particle.x = width + 35;
-            if (particle.x > width + 35) particle.x = -35;
-            if (particle.y > height + 40) {
-                particle.y = -40;
-                particle.x = Math.random() * width;
-            }
-
-            ctx.globalAlpha = particle.opacity;
-            ctx.strokeStyle = particle.color;
-            ctx.lineWidth = particle.width;
-            ctx.beginPath();
-            ctx.moveTo(particle.x, particle.y);
-            const trailX = particle.x + Math.sin((particle.y + particle.sway) * 0.06) * 4;
-            const trailY = particle.y - particle.length;
-            ctx.lineTo(trailX, trailY);
-            ctx.stroke();
-        });
-
-        ctx.globalAlpha = 1;
-        requestAnimationFrame(animate);
-    }
 
     const savedMode = getSavedWeatherMode();
     if (savedMode === "auto") {
-        buildParticles("day");
+        buildWeather("day");
         fetchWeather();
     } else {
         targetScene = savedMode;
         weatherMode = savedMode;
         updateBackgroundTheme(savedMode);
-        buildParticles(savedMode);
+        buildWeather(savedMode);
     }
 
-    animate();
+    renderFrame();
 }
 
 
