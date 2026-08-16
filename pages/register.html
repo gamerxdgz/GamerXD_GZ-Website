@@ -112,7 +112,75 @@
     </main>
 
 
-    <script src="../script.js"></script>
+   <script>
+const registerForm = document.getElementById("registerForm");
+const registerMessage = document.getElementById("registerMessage");
 
-</body>
-</html>
+registerForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value;
+    const confirmPassword =
+        document.getElementById("confirmPassword").value;
+
+    registerMessage.textContent = "";
+
+    if (password !== confirmPassword) {
+        registerMessage.textContent =
+            "Passwords do not match.";
+        return;
+    }
+
+    const button =
+        registerForm.querySelector("button");
+
+    button.disabled = true;
+    button.textContent = "Creating account...";
+
+    try {
+        const response = await fetch("/api/register", {
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                username,
+                password
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            registerMessage.textContent =
+                data.error || "Unable to create account.";
+
+            return;
+        }
+
+        registerMessage.textContent =
+            "Account created. Redirecting to login...";
+
+        registerForm.reset();
+
+        setTimeout(() => {
+            window.location.href = "/pages/login.html";
+        }, 1000);
+
+    } catch (error) {
+
+        console.error(error);
+
+        registerMessage.textContent =
+            "Unable to connect to the server.";
+
+    } finally {
+
+        button.disabled = false;
+        button.textContent = "Create Account";
+    }
+});
+</script>
