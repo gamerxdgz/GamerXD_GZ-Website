@@ -6,24 +6,85 @@
 
     <title>GamerXD_GZ</title>
 
+    <meta
+        name="description"
+        content="The GamerXD_GZ website for projects, gaming, community updates, and more."
+    >
+
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
+    <div id="loader">
+        <div class="loader-content">
+            <div class="loader-logo">GamerXD_GZ</div>
+
+            <div class="loader-bar">
+                <div class="loader-progress"></div>
+            </div>
+
+            <p>Loading...</p>
+        </div>
+    </div>
+
+    <canvas id="particles"></canvas>
+
     <header class="navbar">
-        <a href="index.html" class="logo">GamerXD_GZ</a>
+
+        <a href="index.html" class="logo">
+            GamerXD_GZ
+        </a>
 
         <nav>
+
             <a href="index.html" class="active">Home</a>
-            <a href="pages/projects.html">Projects</a>
-            <a href="pages/minecraft.html">Minecraft</a>
-            <a href="pages/eaglercraft.html">Eaglercraft</a>
-            <a href="pages/vote.html">Vote</a>
-            <a href="pages/news.html">News</a>
-            <a href="pages/community.html">Community</a>
-            <a href="pages/about.html">About</a>
+
+            <a href="pages/projects.html">
+                Projects
+            </a>
+
+            <a href="pages/minecraft.html">
+                Minecraft
+            </a>
+
+            <a href="pages/eaglercraft.html">
+                Eaglercraft
+            </a>
+
+            <a href="pages/vote.html">
+                Vote
+            </a>
+
+            <a href="pages/news.html">
+                News
+            </a>
+
+            <a href="pages/community.html">
+                Community
+            </a>
+
+            <a href="pages/about.html">
+                About
+            </a>
+
+            <div class="nav-auth">
+
+                <a href="pages/login.html">
+                    Login
+                </a>
+
+                <a
+                    href="pages/register.html"
+                    class="nav-register"
+                >
+                    Register
+                </a>
+
+            </div>
+
         </nav>
+
     </header>
 
 
@@ -33,25 +94,52 @@
 
             <div class="hero-content">
 
-                <p class="hero-small">WELCOME TO</p>
+                <p class="hero-small">
+                    GAMERXD_GZ
+                </p>
 
-                <h1>GamerXD_GZ</h1>
+                <h1>
+                    Create.
+                    <span>Build.</span>
+                    Explore.
+                </h1>
 
-                <h2>CREATE • PLAY • EXPLORE</h2>
-
-                <p>
-                    Welcome to the official GamerXD_GZ website.
-                    Explore my projects, games, servers, and more.
+                <p class="hero-description">
+                    Welcome to the GamerXD_GZ website.
+                    Explore projects, gaming experiences,
+                    community updates, and what's coming next.
                 </p>
 
                 <div class="hero-buttons">
-                    <a href="pages/projects.html" class="button">
-                        View Projects
+
+                    <a
+                        href="pages/projects.html"
+                        class="button primary"
+                    >
+                        Explore Projects
                     </a>
 
-                    <a href="pages/discord.html" class="button secondary">
-                        Join Discord
+                    <a
+                        href="pages/community.html"
+                        class="button secondary"
+                    >
+                        Join Community
                     </a>
+
+                    <a
+                        href="pages/login.html"
+                        class="button secondary"
+                    >
+                        Login
+                    </a>
+
+                    <a
+                        href="pages/register.html"
+                        class="button primary"
+                    >
+                        Create Account
+                    </a>
+
                 </div>
 
             </div>
@@ -59,64 +147,149 @@
         </section>
 
 
-        <section class="featured">
+        <section class="home-section reveal">
 
-            <h2>What I'm Working On</h2>
+            <div class="section-heading">
 
-            <div class="cards">
+                <p class="section-label">
+                    GAMERXD_GZ
+                </p>
 
-                <div class="card">
-                    <span class="card-label">PROJECTS</span>
+                <h2>
+                    What's Happening
+                </h2>
+
+                <p>
+                    Check out the latest GamerXD_GZ projects
+                    and upcoming features.
+                </p>
+
+            </div>
+
+
+            <div class="feature-grid">
+
+                <article class="feature-card">
+
+                    <div class="feature-number">
+                        01
+                    </div>
 
                     <h3>Projects</h3>
 
                     <p>
-                        Check out the projects I'm creating and experimenting with.
+                        Explore current and upcoming
+                        GamerXD_GZ projects.
                     </p>
 
-                    <a href="pages/projects.html">Explore</a>
-                </div>
+                    <a href="pages/projects.html">
+                        Explore
+                    </a>
+
+                </article>
 
 
-                <div class="card coming-soon">
-                    <span class="card-label">MINECRAFT</span>
+                <article class="feature-card">
 
-                    <h3>Minecraft</h3>
+                    <div class="feature-number">
+                        02
+                    </div>
 
-                    <div class="badge">COMING SOON</div>
+                    <h3>Community</h3>
 
                     <p>
-                        Minecraft projects and server features are currently in development.
+                        Connect with the GamerXD_GZ community
+                        and stay updated.
                     </p>
-                </div>
+
+                    <a href="pages/community.html">
+                        Join
+                    </a>
+
+                </article>
 
 
-                <div class="card coming-soon">
-                    <span class="card-label">EAGLERCRAFT</span>
+                <article class="feature-card">
 
-                    <h3>Eaglercraft</h3>
+                    <div class="feature-number">
+                        03
+                    </div>
 
-                    <div class="badge">COMING SOON</div>
+                    <h3>Future</h3>
 
                     <p>
-                        Eaglercraft projects and features are currently in development.
+                        Minecraft, Eaglercraft, voting,
+                        and more are coming soon.
                     </p>
-                </div>
 
+                    <a href="pages/news.html">
+                        Updates
+                    </a>
 
-                <div class="card coming-soon">
-                    <span class="card-label">VOTE</span>
-
-                    <h3>Vote</h3>
-
-                    <div class="badge">COMING SOON</div>
-
-                    <p>
-                        Voting features will be available here soon.
-                    </p>
-                </div>
+                </article>
 
             </div>
+
+        </section>
+
+
+        <section class="home-section reveal">
+
+            <div class="coming-card">
+
+                <div>
+
+                    <p class="section-label">
+                        IN DEVELOPMENT
+                    </p>
+
+                    <h2>
+                        More Is Coming
+                    </h2>
+
+                    <p>
+                        GamerXD_GZ is still growing.
+                        New projects, features, and community
+                        experiences will be added over time.
+                    </p>
+
+                </div>
+
+                <a
+                    href="pages/news.html"
+                    class="button primary"
+                >
+                    View News
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <section class="community-home reveal">
+
+            <p class="section-label">
+                COMMUNITY
+            </p>
+
+            <h2>
+                Join GamerXD_GZ
+            </h2>
+
+            <p>
+                Stay connected with the community and get
+                updates about new projects and releases.
+            </p>
+
+            <a
+                href="https://discord.gg/zbNDDqQWbT"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="button primary"
+            >
+                Join Discord
+            </a>
 
         </section>
 
@@ -125,11 +298,69 @@
 
     <footer>
 
-        <p>© 2026 GamerXD_GZ. All rights reserved.</p>
+        <div class="footer-content">
 
-        <p class="disclaimer">
-            This website is not affiliated with or endorsed by Mojang Studios or Microsoft.
-        </p>
+            <div>
+
+                <h3>
+                    GamerXD_GZ
+                </h3>
+
+                <p>
+                    Gaming, development, projects,
+                    and community.
+                </p>
+
+            </div>
+
+
+            <div class="footer-links">
+
+                <a href="pages/projects.html">
+                    Projects
+                </a>
+
+                <a href="pages/news.html">
+                    News
+                </a>
+
+                <a href="pages/community.html">
+                    Community
+                </a>
+
+                <a href="pages/login.html">
+                    Login
+                </a>
+
+                <a href="pages/register.html">
+                    Register
+                </a>
+
+                <a
+                    href="https://discord.gg/zbNDDqQWbT"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Discord
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            <p>
+                © 2026 GamerXD_GZ. All rights reserved.
+            </p>
+
+            <p class="disclaimer">
+                This website is not affiliated with or endorsed
+                by Mojang Studios or Microsoft.
+            </p>
+
+        </div>
 
     </footer>
 

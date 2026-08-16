@@ -1,0 +1,20 @@
+{
+  "$schema": "https://developers.cloudflare.com/workers/wrangler/config-schema.json",
+  "name": "gamerxd-gz-website",
+  "main": "worker.js",
+  "compatibility_date": "2026-08-15",
+  "assets": {
+    "directory": ".",
+    "binding": "ASSETS",
+    "run_worker_first": [
+      "/api/*"
+    ]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "gamerxd-gz-accounts",
+      "database_id": "1f292cee-7123-4476-a61e-4ef6b2536e8f"
+    }
+  ]
+}
