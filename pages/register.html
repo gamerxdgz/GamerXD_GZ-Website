@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register | GamerXD_GZ</title>
+
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body class="auth-page">
+
+    <main class="auth-container">
+
+        <section class="auth-card">
+
+            <a href="../index.html" class="auth-logo">
+                GamerXD_GZ
+            </a>
+
+            <p class="section-label">CREATE ACCOUNT</p>
+
+            <h1>Register</h1>
+
+            <p class="auth-description">
+                Create your GamerXD_GZ account.
+            </p>
+
+
+            <form id="registerForm">
+
+                <label for="username">
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Enter username"
+                    minlength="3"
+                    maxlength="24"
+                    autocomplete="username"
+                    required
+                >
+
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter password"
+                    minlength="8"
+                    autocomplete="new-password"
+                    required
+                >
+
+
+                <label for="confirmPassword">
+                    Confirm Password
+                </label>
+
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    placeholder="Confirm password"
+                    minlength="8"
+                    autocomplete="new-password"
+                    required
+                >
+
+
+                <p
+                    id="registerMessage"
+                    class="auth-message"
+                ></p>
+
+
+                <button
+                    type="submit"
+                    class="button primary auth-button"
+                >
+                    Create Account
+                </button>
+
+            </form>
+
+
+            <p class="auth-switch">
+                Already have an account?
+                <a href="login.html">
+                    Login
+                </a>
+            </p>
+
+
+            <a
+                href="../index.html"
+                class="back-home"
+            >
+                Back to website
+            </a>
+
+        </section>
+
+    </main>
+
+
+    <script src="../script.js"></script>
+
+</body>
+</html>
