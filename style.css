@@ -14,7 +14,7 @@ body {
     background:
         radial-gradient(
             circle at 50% 0%,
-            rgba(0, 120, 255, 0.12),
+            rgba(0, 120, 255, 0.06),
             transparent 35%
         ),
         #050608;
@@ -45,17 +45,13 @@ a {
 
 #particles {
     position: fixed;
-
     inset: 0;
-
     width: 100%;
     height: 100%;
-
     pointer-events: none;
-
     z-index: -1;
-
-    opacity: .55;
+    opacity: 0.7;
+    filter: saturate(0.8);
 }
 
 
@@ -120,8 +116,8 @@ a {
 
     filter:
         drop-shadow(
-            0 0 9px
-            rgba(0,180,255,.65)
+            0 0 6px
+            rgba(0,180,255,.35)
         );
 
     transition:
@@ -528,11 +524,11 @@ a {
         translateY(-8px);
 
     border-color:
-        rgba(0,180,255,.35);
+        rgba(0,180,255,.2);
 
     box-shadow:
-        0 20px 50px
-        rgba(0,120,255,.1);
+        0 14px 36px
+        rgba(0,120,255,.06);
 }
 
 
@@ -860,53 +856,6 @@ footer {
 }
 
 
-/* CLICK EFFECT */
-
-.click-burst {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 0;
-    height: 0;
-    pointer-events: none;
-    z-index: 99999;
-    transform: translate(-50%, -50%);
-}
-
-.click-particle {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: var(--size);
-    height: var(--size);
-    border-radius: 2px;
-    pointer-events: none;
-    background: var(--particle-color);
-    box-shadow: 0 0 8px rgba(150, 220, 110, 0.18);
-    opacity: 0;
-    animation: particleBurst 700ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-
-/* CURSOR GLOW */
-
-.cursor-glow {
-    position: fixed;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 999;
-    background: radial-gradient(
-        circle,
-        rgba(0, 180, 255, 0.2),
-        rgba(0, 180, 255, 0)
-    );
-    transform: translate(-50%, -50%);
-    filter: blur(6px);
-}
-
-
 /* CARD HOVER */
 
 .feature-card.card-hover,
@@ -964,26 +913,6 @@ footer {
     50% {
         opacity: .45;
         transform: scale(.75);
-    }
-}
-
-
-@keyframes particleBurst {
-    0% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.3);
-    }
-
-    12% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-        transform: translate(
-            calc(-50% + var(--dx)),
-            calc(-50% + var(--dy))
-        ) scale(1.8);
     }
 }
 

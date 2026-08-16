@@ -7,9 +7,7 @@
 
 document.addEventListener("DOMContentLoaded", () => {
     setupParticles();
-    setupClickEffect();
     setupScrollAnimations();
-    setupCursorGlow();
     setupCardHover();
 });
 
@@ -33,173 +31,57 @@ function setupParticles() {
     canvas.height = height;
 
     const particles = [];
-
     const palette = [
-        "rgba(150, 190, 120, 0.65)",
-        "rgba(120, 170, 100, 0.58)",
-        "rgba(100, 140, 78, 0.5)",
-        "rgba(180, 150, 105, 0.45)",
-        "rgba(130, 130, 130, 0.42)"
+        "rgba(155, 196, 120, 0.45)",
+        "rgba(122, 170, 96, 0.38)",
+        "rgba(100, 142, 80, 0.32)",
+        "rgba(180, 148, 105, 0.24)",
+        "rgba(128, 128, 128, 0.2)"
     ];
 
-    const particleCount =
-        Math.min(48, Math.floor(width / 22));
+    const particleCount = Math.min(18, Math.floor(width / 60));
 
     for (let i = 0; i < particleCount; i++) {
-
         particles.push({
             x: Math.random() * width,
             y: Math.random() * height,
-
-            size:
-                Math.random() * 1.8 + 1,
-
-            speedX:
-                (Math.random() - 0.5) * 0.18,
-
-            speedY:
-                (Math.random() - 0.5) * 0.18,
-
-            opacity:
-                Math.random() * 0.26 + 0.08,
-
-            color:
-                palette[Math.floor(Math.random() * palette.length)]
+            size: Math.random() * 2.3 + 0.8,
+            speedX: (Math.random() - 0.5) * 0.12,
+            speedY: (Math.random() - 0.5) * 0.12,
+            opacity: Math.random() * 0.2 + 0.04,
+            color: palette[Math.floor(Math.random() * palette.length)]
         });
-
     }
 
-
     window.addEventListener("resize", () => {
-
         width = window.innerWidth;
         height = window.innerHeight;
-
         canvas.width = width;
         canvas.height = height;
-
     });
 
-
     function animate() {
-
-        ctx.clearRect(
-            0,
-            0,
-            width,
-            height
-        );
-
+        ctx.clearRect(0, 0, width, height);
 
         particles.forEach(particle => {
-
             particle.x += particle.speedX;
             particle.y += particle.speedY;
 
-
-            if (particle.x < 0)
-                particle.x = width;
-
-            if (particle.x > width)
-                particle.x = 0;
-
-            if (particle.y < 0)
-                particle.y = height;
-
-            if (particle.y > height)
-                particle.y = 0;
+            if (particle.x < 0) particle.x = width;
+            if (particle.x > width) particle.x = 0;
+            if (particle.y < 0) particle.y = height;
+            if (particle.y > height) particle.y = 0;
 
             ctx.globalAlpha = particle.opacity;
             ctx.fillStyle = particle.color;
-            ctx.fillRect(
-                particle.x,
-                particle.y,
-                particle.size,
-                particle.size
-            );
-
+            ctx.fillRect(particle.x, particle.y, particle.size, particle.size);
         });
 
         ctx.globalAlpha = 1;
-
-
         requestAnimationFrame(animate);
-
     }
 
     animate();
-}
-
-
-/* =========================================
-   Click Particle Burst
-========================================= */
-
-function setupClickEffect() {
-
-    document.addEventListener("pointerdown", event => {
-
-        const burst =
-            document.createElement("div");
-
-        burst.className = "click-burst";
-
-        burst.style.left =
-            `${event.clientX}px`;
-
-        burst.style.top =
-            `${event.clientY}px`;
-
-        const particleCount = 10;
-        const particleColors = [
-            "rgba(150, 220, 110, 0.9)",
-            "rgba(120, 190, 90, 0.8)",
-            "rgba(195, 166, 118, 0.7)",
-            "rgba(130, 128, 128, 0.7)"
-        ];
-
-        for (let i = 0; i < particleCount; i++) {
-
-            const particle =
-                document.createElement("span");
-
-            const angle =
-                (Math.PI * 2 * i) / particleCount +
-                (Math.random() - 0.5) * 0.7;
-
-            const distance =
-                10 + Math.random() * 22;
-
-            const offsetX =
-                Math.cos(angle) * distance;
-
-            const offsetY =
-                Math.sin(angle) * distance;
-
-            const size =
-                2 + Math.random() * 4;
-
-            particle.className = "click-particle";
-            particle.style.setProperty("--dx", `${offsetX}px`);
-            particle.style.setProperty("--dy", `${offsetY}px`);
-            particle.style.setProperty("--size", `${size}px`);
-            particle.style.setProperty(
-                "--particle-color",
-                particleColors[Math.floor(Math.random() * particleColors.length)]
-            );
-
-            burst.appendChild(particle);
-
-        }
-
-        document.body.appendChild(burst);
-
-        setTimeout(() => {
-            burst.remove();
-        }, 700);
-
-    });
-
 }
 
 
