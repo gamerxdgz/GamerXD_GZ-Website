@@ -224,15 +224,19 @@ document.addEventListener('visibilitychange', () => {
     if (document.hidden) return;
 });
 
+function getAIPageTarget() {
+    const path = window.location.pathname || '';
+    const nested = path.includes('/pages/');
+    return nested ? '../ai.html' : './ai.html';
+}
+
 function ensureGlobalAIButton() {
     const pageName = (window.location.pathname || '').split('/').pop();
     const isSettingsPage = pageName === 'settings.html';
 
     const existingButton = document.getElementById('global-ai-button');
     if (isSettingsPage) {
-        if (existingButton) {
-            existingButton.remove();
-        }
+        if (existingButton) existingButton.remove();
         return;
     }
 
@@ -251,7 +255,7 @@ function ensureGlobalAIButton() {
 
         const handleAIClick = () => {
             const currentPage = window.location.pathname;
-            if (currentPage.includes('ai.html')) {
+            if (currentPage.endsWith('/ai.html') || currentPage.endsWith('ai.html')) {
                 const chatInput = document.getElementById('chat-input');
                 if (chatInput) {
                     chatInput.focus();
@@ -259,7 +263,7 @@ function ensureGlobalAIButton() {
                 }
             }
 
-            const target = new URL('./ai.html', window.location.href);
+            const target = new URL(getAIPageTarget(), window.location.href);
             window.location.href = target.toString();
         };
 
@@ -270,22 +274,26 @@ function ensureGlobalAIButton() {
     aiButton.style.display = 'flex';
     aiButton.style.opacity = '1';
     aiButton.style.visibility = 'visible';
+    aiButton.style.position = 'fixed';
+    aiButton.style.bottom = '24px';
+    aiButton.style.right = '24px';
+    aiButton.style.zIndex = '2147483647';
 
-    document.onkeydown = function (e) {
+    document.addEventListener('keydown', (e) => {
         if (e.altKey && e.key && e.key.toLowerCase() === 'a') {
             e.preventDefault();
             const currentPage = window.location.pathname;
-            if (currentPage.includes('ai.html')) {
+            if (currentPage.endsWith('/ai.html') || currentPage.endsWith('ai.html')) {
                 const chatInput = document.getElementById('chat-input');
                 if (chatInput) {
                     chatInput.focus();
                     return;
                 }
             }
-            const target = new URL('./ai.html', window.location.href);
+            const target = new URL(getAIPageTarget(), window.location.href);
             window.location.href = target.toString();
         }
-    };
+    });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
