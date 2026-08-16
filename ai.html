@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant - GamerXD_GZ</title>
+    <link rel="icon" href="assets/logo.png" type="image/png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <a href="index.html">
+            <img src="assets/logo.png" alt="GamerXD_GZ">
+            <span>GamerXD_GZ</span>
+        </a>
+
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="pages/projects.html">Projects</a>
+            <a href="pages/minecraft.html">Minecraft</a>
+            <a href="pages/eaglercraft.html">Eaglercraft</a>
+            <a href="pages/community.html">Community</a>
+            <a href="ai.html" class="active">AI Bot</a>
+        </nav>
+    </header>
+
+    <main class="chat-page-container">
+        <section class="chat-section">
+            <h1>GamerXD AI Assistant</h1>
+            <p>Ask anything about Minecraft projects, Eaglercraft, or community news!</p>
+
+            <div id="chat-window">
+                <div id="chat-messages">
+                    <div class="msg bot">Hello! I'm the GamerXD_GZ AI. What would you like to know today?</div>
+                </div>
+
+                <form id="chat-form">
+                    <input type="text" id="chat-input" placeholder="Type your message..." autocomplete="off" required>
+                    <button type="submit" id="chat-submit">Send</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

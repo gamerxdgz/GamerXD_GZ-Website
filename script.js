@@ -1,3 +1,5 @@
+"use strict";
+
 /* =========================================
    GamerXD_GZ Website Effects
    Simple, clean, and customizable
@@ -268,236 +270,6 @@ function setupCardHover() {
     });
 
 }
-"use strict";
-
-
-/* =========================================
-   PARTICLES
-========================================= */
-
-const canvas =
-    document.getElementById("particles");
-
-if (canvas) {
-
-    const ctx =
-        canvas.getContext("2d");
-
-    let width =
-        window.innerWidth;
-
-    let height =
-        window.innerHeight;
-
-    canvas.width = width;
-    canvas.height = height;
-
-
-    const particles = [];
-
-    const count =
-        Math.min(
-            90,
-            Math.floor(width / 12)
-        );
-
-
-    for (
-        let i = 0;
-        i < count;
-        i++
-    ) {
-
-        particles.push({
-
-            x:
-                Math.random() * width,
-
-            y:
-                Math.random() * height,
-
-            size:
-                Math.random() * 1.8 + .4,
-
-            speedX:
-                (Math.random() - .5) * .3,
-
-            speedY:
-                (Math.random() - .5) * .3,
-
-            opacity:
-                Math.random() * .4 + .1
-
-        });
-
-    }
-
-
-    window.addEventListener(
-        "resize",
-        () => {
-
-            width =
-                window.innerWidth;
-
-            height =
-                window.innerHeight;
-
-            canvas.width =
-                width;
-
-            canvas.height =
-                height;
-
-        }
-    );
-
-
-    function animateParticles() {
-
-        ctx.clearRect(
-            0,
-            0,
-            width,
-            height
-        );
-
-
-        for (const particle of particles) {
-
-            particle.x +=
-                particle.speedX;
-
-            particle.y +=
-                particle.speedY;
-
-
-            if (particle.x < 0)
-                particle.x = width;
-
-            if (particle.x > width)
-                particle.x = 0;
-
-            if (particle.y < 0)
-                particle.y = height;
-
-            if (particle.y > height)
-                particle.y = 0;
-
-
-            ctx.beginPath();
-
-            ctx.arc(
-                particle.x,
-                particle.y,
-                particle.size,
-                0,
-                Math.PI * 2
-            );
-
-
-            ctx.fillStyle =
-                `rgba(
-                    255,
-                    255,
-                    255,
-                    ${particle.opacity}
-                )`;
-
-            ctx.fill();
-
-        }
-
-
-        requestAnimationFrame(
-            animateParticles
-        );
-
-    }
-
-
-    animateParticles();
-
-}
-
-
-/* =========================================
-   CLICK RIPPLE
-========================================= */
-
-document.addEventListener(
-    "click",
-    event => {
-
-        const ripple =
-            document.createElement("div");
-
-        ripple.className =
-            "click-ripple";
-
-        ripple.style.left =
-            `${event.clientX}px`;
-
-        ripple.style.top =
-            `${event.clientY}px`;
-
-        document.body.appendChild(
-            ripple
-        );
-
-
-        setTimeout(
-            () => ripple.remove(),
-            600
-        );
-
-    }
-);
-
-
-/* =========================================
-   SCROLL REVEAL
-========================================= */
-
-const revealElements =
-    document.querySelectorAll(
-        ".reveal"
-    );
-
-
-if (revealElements.length) {
-
-    const observer =
-        new IntersectionObserver(
-            entries => {
-
-                for (const entry of entries) {
-
-                    if (
-                        entry.isIntersecting
-                    ) {
-
-                        entry.target.classList.add(
-                            "show"
-                        );
-
-                    }
-
-                }
-
-            },
-            {
-                threshold: .12
-            }
-        );
-
-
-    revealElements.forEach(
-        element =>
-            observer.observe(element)
-    );
-
-}
 
 
 /* =========================================
@@ -699,3 +471,51 @@ document.querySelectorAll(
 
     }
 );
+// --- GamerXD_GZ AI Chatbot Logic ---
+document.addEventListener('DOMContentLoaded', () => {
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
+    const chatMessages = document.getElementById('chat-messages');
+    const chatSubmit = document.getElementById('chat-submit');
+
+    if (!chatForm) return; // Safely skips this code on pages without the chat form
+
+    chatForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const messageText = chatInput.value.trim();
+        if (!messageText) return;
+
+        // Render User Message
+        appendMessage('user', messageText);
+        chatInput.value = '';
+        chatSubmit.disabled = true;
+
+        // Render Loading Indicator
+        const loadingDiv = appendMessage('bot', 'Thinking...');
+
+        try {
+            const res = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: messageText })
+            });
+
+            const data = await res.json();
+            loadingDiv.textContent = data.response || "Sorry, I couldn't process that.";
+        } catch (error) {
+            loadingDiv.textContent = "Error: Unable to connect to GamerXD AI backend.";
+        } finally {
+            chatSubmit.disabled = false;
+        }
+    });
+
+    function appendMessage(sender, text) {
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add('msg', sender);
+        msgDiv.textContent = text;
+        chatMessages.appendChild(msgDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        return msgDiv;
+    }
+});
