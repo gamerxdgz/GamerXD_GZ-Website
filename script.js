@@ -224,18 +224,65 @@ document.addEventListener('visibilitychange', () => {
     if (document.hidden) return;
 });
 
+function ensureGlobalAIButton() {
+    const root = document.body || document.documentElement;
+    if (!root) return;
+
+    let aiButton = document.getElementById('global-ai-button');
+    if (!aiButton) {
+        aiButton = document.createElement('button');
+        aiButton.id = 'global-ai-button';
+        aiButton.className = 'ai-button';
+        aiButton.type = 'button';
+        aiButton.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><text x="12" y="16" text-anchor="middle" font-size="8" fill="currentColor">AI</text></svg>';
+        aiButton.title = 'AI Assistant (Alt+A)';
+        aiButton.setAttribute('aria-label', 'Open AI Assistant');
+        aiButton.style.display = 'flex';
+        aiButton.style.opacity = '1';
+        aiButton.style.visibility = 'visible';
+
+        const handleAIClick = () => {
+            const currentPage = window.location.pathname;
+            if (currentPage.includes('ai.html')) {
+                const chatInput = document.getElementById('chat-input');
+                if (chatInput) {
+                    chatInput.focus();
+                    return;
+                }
+            }
+
+            const target = new URL('./ai.html', window.location.href);
+            window.location.href = target.toString();
+        };
+
+        aiButton.addEventListener('click', handleAIClick);
+        document.addEventListener('keydown', (e) => {
+            if (e.altKey && e.key.toLowerCase() === 'a') {
+                e.preventDefault();
+                handleAIClick();
+            }
+        }, { once: true });
+        root.appendChild(aiButton);
+    }
+
+    aiButton.style.display = 'flex';
+    aiButton.style.opacity = '1';
+    aiButton.style.visibility = 'visible';
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     const savedTheme = localStorage.getItem(THEME_KEY) || "purple-blue";
     applyTheme(savedTheme);
-    setupGlobalAIButton();
+    ensureGlobalAIButton();
     setupParticles();
     setupScrollAnimations();
     setupCardHover();
 });
 
-window.addEventListener('pageshow', setupGlobalAIButton);
+window.addEventListener('pageshow', ensureGlobalAIButton);
+window.addEventListener('load', ensureGlobalAIButton);
 if (document.readyState !== 'loading') {
-    setupGlobalAIButton();
+    ensureGlobalAIButton();
 }
 
 /* =========================================
@@ -243,47 +290,46 @@ if (document.readyState !== 'loading') {
 ========================================= */
 
 function setupGlobalAIButton() {
-    const existingButton = document.getElementById('global-ai-button');
-    if (existingButton) {
-        existingButton.style.display = 'flex';
-        existingButton.style.opacity = '1';
-        existingButton.style.visibility = 'visible';
-        return;
+    const root = document.body || document.documentElement;
+    if (!root) return;
+
+    let aiButton = document.getElementById('global-ai-button');
+    if (!aiButton) {
+        aiButton = document.createElement('button');
+        aiButton.id = 'global-ai-button';
+        aiButton.className = 'ai-button';
+        aiButton.type = 'button';
+        aiButton.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><text x="12" y="16" text-anchor="middle" font-size="8" fill="currentColor">AI</text></svg>';
+        aiButton.title = 'AI Assistant (Alt+A)';
+        aiButton.setAttribute('aria-label', 'Open AI Assistant');
+
+        const handleAIClick = () => {
+            const currentPage = window.location.pathname;
+            if (currentPage.includes('ai.html')) {
+                const chatInput = document.getElementById('chat-input');
+                if (chatInput) {
+                    chatInput.focus();
+                    return;
+                }
+            }
+
+            const target = new URL('./ai.html', window.location.href);
+            window.location.href = target.toString();
+        };
+
+        aiButton.addEventListener('click', handleAIClick);
+        document.addEventListener('keydown', (e) => {
+            if (e.altKey && e.key.toLowerCase() === 'a') {
+                e.preventDefault();
+                handleAIClick();
+            }
+        }, { once: true });
+        root.appendChild(aiButton);
     }
 
-    const aiButton = document.createElement('button');
-    aiButton.id = 'global-ai-button';
-    aiButton.className = 'ai-button';
-    aiButton.type = 'button';
-    aiButton.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><text x="12" y="16" text-anchor="middle" font-size="8" fill="currentColor">AI</text></svg>';
-    aiButton.title = 'AI Assistant (Alt+A)';
-    aiButton.setAttribute('aria-label', 'Open AI Assistant');
     aiButton.style.display = 'flex';
     aiButton.style.opacity = '1';
     aiButton.style.visibility = 'visible';
-
-    if (document.body) {
-        document.body.appendChild(aiButton);
-    }
-
-    const handleAIClick = () => {
-        const currentPage = window.location.pathname;
-        if (currentPage.includes('ai.html')) {
-            const chatInput = document.getElementById('chat-input');
-            if (chatInput) chatInput.focus();
-        } else {
-            window.location.href = '/ai.html';
-        }
-    };
-
-    aiButton.addEventListener('click', handleAIClick);
-
-    document.addEventListener('keydown', (e) => {
-        if (e.altKey && e.key.toLowerCase() === 'a') {
-            e.preventDefault();
-            handleAIClick();
-        }
-    });
 }
 
 
