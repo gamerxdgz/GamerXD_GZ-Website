@@ -501,10 +501,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ message: messageText })
             });
 
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+
             const data = await res.json();
-            loadingDiv.textContent = data.response || "Sorry, I couldn't process that.";
+            
+            if (data.error) {
+                loadingDiv.textContent = `Error: ${data.error}`;
+            } else if (data.response) {
+                loadingDiv.textContent = data.response;
+            } else {
+                loadingDiv.textContent = "Sorry, I couldn't process that response.";
+            }
         } catch (error) {
-            loadingDiv.textContent = "Error: Unable to connect to GamerXD AI backend.";
+            console.error("Chat error:", error);
+            loadingDiv.textContent = "Error: Unable to connect to GamerXD AI backend. Make sure the Cloudflare Worker is deployed.";
         } finally {
             chatSubmit.disabled = false;
         }

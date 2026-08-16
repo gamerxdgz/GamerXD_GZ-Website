@@ -25,11 +25,15 @@ export default {
           ]
         });
 
-        return new Response(JSON.stringify({ response: aiResponse.response }), {
+        // Extract the response text from the AI model
+        const responseText = aiResponse.result?.response || aiResponse.response || "I'm not sure how to respond to that.";
+
+        return new Response(JSON.stringify({ response: responseText }), {
           headers: { "Content-Type": "application/json" }
         });
 
       } catch (err) {
+        console.error("AI Error:", err);
         return new Response(JSON.stringify({ error: "Failed to generate AI response." }), {
           status: 500,
           headers: { "Content-Type": "application/json" }
