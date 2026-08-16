@@ -11,6 +11,30 @@ document.addEventListener("DOMContentLoaded", () => {
     setupCardHover();
 });
 
+function drawWindowGlass(ctx, width, height) {
+    ctx.fillStyle = "rgba(255,255,255,0.015)";
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.strokeStyle = "rgba(255,255,255,0.025)";
+    ctx.lineWidth = 1;
+
+    for (let i = 0; i <= 4; i++) {
+        const x = (width / 4) * i;
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, height);
+        ctx.stroke();
+    }
+
+    for (let i = 0; i <= 5; i++) {
+        const y = (height / 5) * i;
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(width, y);
+        ctx.stroke();
+    }
+}
+
 
 /* =========================================
    Background Particles
@@ -32,23 +56,23 @@ function setupParticles() {
 
     const particles = [];
     const palette = [
-        "rgba(155, 196, 120, 0.45)",
-        "rgba(122, 170, 96, 0.38)",
-        "rgba(100, 142, 80, 0.32)",
-        "rgba(180, 148, 105, 0.24)",
-        "rgba(128, 128, 128, 0.2)"
+        "rgba(180, 200, 220, 0.28)",
+        "rgba(160, 178, 200, 0.24)",
+        "rgba(200, 215, 230, 0.2)",
+        "rgba(126, 146, 170, 0.18)"
     ];
 
-    const particleCount = Math.min(18, Math.floor(width / 60));
+    const particleCount = Math.min(55, Math.floor(width / 24));
 
     for (let i = 0; i < particleCount; i++) {
         particles.push({
             x: Math.random() * width,
             y: Math.random() * height,
-            size: Math.random() * 2.3 + 0.8,
-            speedX: (Math.random() - 0.5) * 0.12,
-            speedY: (Math.random() - 0.5) * 0.12,
-            opacity: Math.random() * 0.2 + 0.04,
+            length: Math.random() * 16 + 10,
+            width: Math.random() * 0.9 + 0.55,
+            speedX: (Math.random() - 0.5) * 0.25,
+            speedY: Math.random() * 2.3 + 1.6,
+            opacity: Math.random() * 0.16 + 0.05,
             color: palette[Math.floor(Math.random() * palette.length)]
         });
     }
@@ -62,19 +86,26 @@ function setupParticles() {
 
     function animate() {
         ctx.clearRect(0, 0, width, height);
+        drawWindowGlass(ctx, width, height);
 
         particles.forEach(particle => {
             particle.x += particle.speedX;
             particle.y += particle.speedY;
 
-            if (particle.x < 0) particle.x = width;
-            if (particle.x > width) particle.x = 0;
-            if (particle.y < 0) particle.y = height;
-            if (particle.y > height) particle.y = 0;
+            if (particle.x < -20) particle.x = width + 20;
+            if (particle.x > width + 20) particle.x = -20;
+            if (particle.y > height + 30) {
+                particle.y = -30;
+                particle.x = Math.random() * width;
+            }
 
             ctx.globalAlpha = particle.opacity;
-            ctx.fillStyle = particle.color;
-            ctx.fillRect(particle.x, particle.y, particle.size, particle.size);
+            ctx.strokeStyle = particle.color;
+            ctx.lineWidth = particle.width;
+            ctx.beginPath();
+            ctx.moveTo(particle.x, particle.y);
+            ctx.lineTo(particle.x - particle.speedX * 3.8, particle.y - particle.length);
+            ctx.stroke();
         });
 
         ctx.globalAlpha = 1;
