@@ -1,7 +1,0 @@
-worker.js
-wrangler.jsonc
-.git
-.gitignore
-.github
-node_modules
-README.md
