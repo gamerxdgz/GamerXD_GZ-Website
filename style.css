@@ -12,6 +12,9 @@
     --text-primary: #f5f7ff;
     --text-secondary: #e4ebff;
     --text-muted: rgba(228, 235, 255, 0.82);
+    --accent: #7dd3fc;
+    --accent-strong: #48a8ff;
+    --nav-bg: rgba(12, 15, 22, 0.7);
     --card-bg-1: rgba(255,255,255,0.18);
     --card-bg-2: rgba(126,132,255,0.12);
     --card-border: rgba(255,255,255,0.28);
@@ -89,30 +92,18 @@ a {
 
 .navbar {
     position: sticky;
-
     top: 0;
-
     z-index: 1000;
-
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
-    gap: 25px;
-
-    padding: 13px 5%;
-
-    background:
-        rgba(5, 6, 8, .78);
-
-    border-bottom:
-        1px solid
-        rgba(255,255,255,.08);
-
-    backdrop-filter:
-        blur(18px);
+    gap: 24px;
+    padding: 14px 5%;
+    background: linear-gradient(180deg, rgba(11, 13, 19, 0.8), rgba(11, 13, 19, 0.58));
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 10px 30px rgba(4, 6, 12, 0.18);
 }
 
 
@@ -192,20 +183,14 @@ a {
 
 .navbar nav a {
     position: relative;
-
-    padding:
-        9px 10px;
-
-    color:
-        rgba(255,255,255,.65);
-
+    padding: 9px 12px;
+    color: rgba(255,255,255,0.72);
     text-decoration: none;
-
     font-size: 13px;
-
-    transition:
-        color .2s ease,
-        transform .2s ease;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    border-radius: 999px;
+    transition: color 0.2s ease, transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 
 
@@ -234,9 +219,9 @@ a {
 .navbar nav a:hover,
 .navbar nav a.active {
     color: white;
-
-    transform:
-        translateY(-1px);
+    background: rgba(255,255,255,0.06);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06), 0 8px 18px rgba(22, 30, 55, 0.18);
+    transform: translateY(-1px);
 }
 
 
@@ -333,20 +318,11 @@ a {
 
 .hero h1 span {
     display: block;
-
-    background:
-        linear-gradient(
-            90deg,
-            #fff,
-            #35c8ff,
-            #177fff
-        );
-
+    background: linear-gradient(90deg, #ffffff 0%, #dfe9ff 18%, #7dd3fc 52%, #7aa7ff 100%);
     color: transparent;
-
     background-clip: text;
-
     -webkit-background-clip: text;
+    text-shadow: 0 8px 18px rgba(66, 125, 255, 0.18);
 }
 
 
@@ -399,27 +375,16 @@ a {
 
 .button {
     display: inline-flex;
-
     align-items: center;
-
     justify-content: center;
-
     min-height: 46px;
-
-    padding:
-        0 20px;
-
-    border-radius: 8px;
-
+    padding: 0 20px;
+    border-radius: 12px;
     color: white;
-
     text-decoration: none;
-
     font-weight: 700;
-
-    transition:
-        transform .2s ease,
-        box-shadow .2s ease;
+    letter-spacing: 0.01em;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 
@@ -430,16 +395,8 @@ a {
 
 
 .button.primary {
-    background:
-        linear-gradient(
-            135deg,
-            #087dff,
-            #00bfff
-        );
-
-    box-shadow:
-        0 8px 30px
-        rgba(0,150,255,.2);
+    background: linear-gradient(135deg, #0b7dff 0%, #2bb9ff 48%, #7dd3fc 100%);
+    box-shadow: 0 12px 30px rgba(34, 130, 255, 0.28);
 }
 
 
@@ -451,12 +408,9 @@ a {
 
 
 .button.secondary {
-    border:
-        1px solid
-        rgba(255,255,255,.14);
-
-    background:
-        rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,0.14);
+    background: rgba(255,255,255,0.04);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
 }
 
 
@@ -549,9 +503,13 @@ a {
 }
 
 .feature-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-8px) scale(1.01);
     border-color: rgba(255,255,255,0.42);
-    box-shadow: 0 20px 50px rgba(0,0,0,0.18), var(--card-shadow);
+    box-shadow: 0 24px 52px rgba(0,0,0,0.18), var(--card-shadow);
+}
+
+.feature-card:nth-child(2n):hover {
+    transform: translateY(-8px) scale(1.01);
 }
 
 
