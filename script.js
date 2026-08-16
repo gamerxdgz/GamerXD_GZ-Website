@@ -5,7 +5,29 @@
    Simple, clean, and customizable
 ========================================= */
 
+/* =========================================
+   Performance & State Tracking
+========================================= */
+
+let lastFrameTime = performance.now();
+let frameCount = 0;
+let isTabVisible = true;
+const WEATHER_CSS_VARS = {
+    '--card-bg-opacity': '0.75',
+    '--card-border-opacity': '1',
+    '--card-text-color': 'rgba(255, 255, 255, 0.95)',
+    '--card-muted-color': 'rgba(255, 255, 255, 0.58)',
+    '--card-shadow': '0 14px 36px rgba(0, 120, 255, 0.06)',
+    '--card-blur': '8px',
+    '--card-border-color': 'rgba(255, 255, 255, 0.08)'
+};
+
+document.addEventListener('visibilitychange', () => {
+    isTabVisible = !document.hidden;
+});
+
 document.addEventListener("DOMContentLoaded", () => {
+    setupGlobalAIButton();
     setupParticles();
     setupScrollAnimations();
     setupCardHover();
@@ -750,14 +772,60 @@ function setupParticles() {
         }
     }
 
-    function renderFrame() {
+    function updateCardStyling(mode) {
+        const brightModes = ["day", "sunrise", "snowy", "cloudy"];
+        const darkModes = ["night", "rain", "foggy", "thunder"];
+        const warmModes = ["sunrise", "sunset", "dusk"];
+
+        if (darkModes.includes(mode)) {
+            document.documentElement.style.setProperty('--card-bg-opacity', '0.82');
+            document.documentElement.style.setProperty('--card-border-opacity', '1.2');
+            document.documentElement.style.setProperty('--card-text-color', 'rgba(255, 255, 255, 1)');
+            document.documentElement.style.setProperty('--card-muted-color', 'rgba(255, 255, 255, 0.68)');
+            document.documentElement.style.setProperty('--card-shadow', '0 14px 40px rgba(0, 100, 200, 0.1)');
+            document.documentElement.style.setProperty('--card-blur', '12px');
+            document.documentElement.style.setProperty('--card-border-color', 'rgba(100, 180, 255, 0.15)');
+        } else if (brightModes.includes(mode)) {
+            document.documentElement.style.setProperty('--card-bg-opacity', '0.68');
+            document.documentElement.style.setProperty('--card-border-opacity', '0.9');
+            document.documentElement.style.setProperty('--card-text-color', 'rgba(255, 255, 255, 0.98)');
+            document.documentElement.style.setProperty('--card-muted-color', 'rgba(255, 255, 255, 0.62)');
+            document.documentElement.style.setProperty('--card-shadow', '0 12px 32px rgba(0, 120, 255, 0.08)');
+            document.documentElement.style.setProperty('--card-blur', '10px');
+            document.documentElement.style.setProperty('--card-border-color', 'rgba(255, 255, 255, 0.1)');
+        } else if (warmModes.includes(mode)) {
+            document.documentElement.style.setProperty('--card-bg-opacity', '0.72');
+            document.documentElement.style.setProperty('--card-border-opacity', '0.95');
+            document.documentElement.style.setProperty('--card-text-color', 'rgba(255, 255, 255, 0.96)');
+            document.documentElement.style.setProperty('--card-muted-color', 'rgba(255, 255, 255, 0.60)');
+            document.documentElement.style.setProperty('--card-shadow', '0 14px 36px rgba(255, 100, 50, 0.08)');
+            document.documentElement.style.setProperty('--card-blur', '9px');
+            document.documentElement.style.setProperty('--card-border-color', 'rgba(255, 200, 100, 0.12)');
+        } else {
+            Object.entries(WEATHER_CSS_VARS).forEach(([key, value]) => {
+                document.documentElement.style.setProperty(key, value);
+            });
+        }
+    }
+
+    function renderFrame(currentTime = performance.now()) {
+        if (!isTabVisible) {
+            requestAnimationFrame(renderFrame);
+            return;
+        }
+
+        const deltaTime = Math.min((currentTime - lastFrameTime) / 1000, 0.033);
+        lastFrameTime = currentTime;
+        frameCount++;
+
         ctx.clearRect(0, 0, width, height);
 
         if (targetScene !== weatherMode) {
-            sceneBlend = clamp(sceneBlend + 0.025, 0, 1);
+            sceneBlend = clamp(sceneBlend + 0.035, 0, 1);
             if (sceneBlend >= 1) {
                 weatherMode = targetScene;
                 sceneBlend = 1;
+                updateCardStyling(weatherMode);
             }
         } else {
             sceneBlend = 1;
@@ -775,7 +843,7 @@ function setupParticles() {
         requestAnimationFrame(renderFrame);
     }
 
-    async function fetchWeather() {
+    async function fetchWeather(useLocation = false) {
         const savedMode = getSavedWeatherMode();
         if (savedMode && savedMode !== "auto") {
             targetScene = savedMode;
@@ -783,25 +851,28 @@ function setupParticles() {
             sceneBlend = 1;
             updateBackgroundTheme(savedMode);
             buildWeather(savedMode);
+            updateCardStyling(savedMode);
             return;
         }
 
         let latitude = 40.7128;
         let longitude = -74.006;
+        let locationFound = false;
 
-        if (navigator.geolocation) {
+        if (useLocation && navigator.geolocation) {
             try {
                 const position = await new Promise((resolve, reject) => {
                     navigator.geolocation.getCurrentPosition(resolve, reject, {
                         enableHighAccuracy: false,
-                        timeout: 10000,
+                        timeout: 8000,
                         maximumAge: 600000
                     });
                 });
                 latitude = position.coords.latitude;
                 longitude = position.coords.longitude;
+                locationFound = true;
             } catch {
-                // fallback to New York
+                // fallback to default location
             }
         }
 
@@ -821,6 +892,7 @@ function setupParticles() {
             sceneBlend = 1;
             updateBackgroundTheme(nextScene);
             buildWeather(nextScene);
+            updateCardStyling(nextScene);
         } catch {
             const fallbackScene = getSceneFromWeather(0, 0, true, new Date().getHours());
             targetScene = fallbackScene;
@@ -828,8 +900,11 @@ function setupParticles() {
             sceneBlend = 1;
             updateBackgroundTheme(fallbackScene);
             buildWeather(fallbackScene);
+            updateCardStyling(fallbackScene);
         }
     }
+
+    window.fetchWeatherWithLocation = fetchWeather;
 
     window.addEventListener("resize", () => {
         width = window.innerWidth;
@@ -840,17 +915,61 @@ function setupParticles() {
     });
 
     const savedMode = getSavedWeatherMode();
+    const enableAutoLocation = localStorage.getItem("gamerxdgz_location_enabled") === "true";
+
     if (savedMode === "auto") {
         buildWeather("day");
-        fetchWeather();
+        updateCardStyling("day");
+        if (enableAutoLocation) {
+            fetchWeather(true);
+        } else {
+            fetchWeather(false);
+        }
     } else {
         targetScene = savedMode;
         weatherMode = savedMode;
         updateBackgroundTheme(savedMode);
         buildWeather(savedMode);
+        updateCardStyling(savedMode);
     }
 
     renderFrame();
+}
+
+/* =========================================
+   Global AI Assistant Button
+========================================= */
+
+function setupGlobalAIButton() {
+    const existingButton = document.getElementById('global-ai-button');
+    if (existingButton) return;
+
+    const aiButton = document.createElement('button');
+    aiButton.id = 'global-ai-button';
+    aiButton.className = 'ai-button';
+    aiButton.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><text x="12" y="16" text-anchor="middle" font-size="8" fill="currentColor">AI</text></svg>';
+    aiButton.title = 'AI Assistant (Alt+A)';
+    aiButton.setAttribute('aria-label', 'Open AI Assistant');
+    document.body.appendChild(aiButton);
+
+    const handleAIClick = () => {
+        const currentPage = window.location.pathname;
+        if (currentPage.includes('ai.html')) {
+            const chatInput = document.getElementById('chat-input');
+            if (chatInput) chatInput.focus();
+        } else {
+            window.location.href = '/ai.html';
+        }
+    };
+
+    aiButton.addEventListener('click', handleAIClick);
+
+    document.addEventListener('keydown', (e) => {
+        if (e.altKey && e.key.toLowerCase() === 'a') {
+            e.preventDefault();
+            handleAIClick();
+        }
+    });
 }
 
 
