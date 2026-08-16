@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GamerXD_GZ | Weather Settings</title>
+    <link rel="icon" type="image/png" href="../assets/logo.png">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        body {
+            min-height: 100vh;
+        }
+
+        .settings-page {
+            width: min(1000px, 92%);
+            margin: 60px auto 80px;
+            padding: 36px 28px 32px;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            background: rgba(8, 12, 18, 0.52);
+            box-shadow: 0 30px 70px rgba(0,0,0,0.22);
+            backdrop-filter: blur(18px);
+        }
+
+        .settings-header {
+            margin-bottom: 28px;
+        }
+
+        .settings-header .section-label {
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .settings-header h1 {
+            font-size: clamp(34px, 5vw, 58px);
+            letter-spacing: -2px;
+            line-height: 1.05;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-top: 20px;
+        }
+
+        .weather-option {
+            position: relative;
+            display: block;
+            width: 100%;
+            min-height: 120px;
+            padding: 20px 18px;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+            color: white;
+            text-align: left;
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .weather-option:hover {
+            transform: translateY(-2px);
+            border-color: rgba(25, 191, 255, 0.45);
+            box-shadow: 0 18px 30px rgba(0, 170, 255, 0.08);
+        }
+
+        .weather-option.active {
+            border-color: rgba(25, 191, 255, 0.8);
+            background: linear-gradient(145deg, rgba(25, 191, 255, 0.12), rgba(255,255,255,0.03));
+            box-shadow: 0 18px 36px rgba(25, 191, 255, 0.15);
+        }
+
+        .weather-option small {
+            display: block;
+            margin-top: 10px;
+            color: rgba(255,255,255,0.64);
+            font-size: 12px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .weather-option strong {
+            display: block;
+            margin-top: 6px;
+            font-size: 22px;
+            letter-spacing: -0.6px;
+        }
+
+        .settings-actions {
+            margin-top: 28px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .button {
+            border: none;
+            cursor: pointer;
+            font: inherit;
+        }
+
+        @media (max-width: 720px) {
+            .settings-page {
+                margin-top: 30px;
+                padding: 26px 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<header class="navbar">
+    <a href="../index.html" class="logo">
+        <img src="../assets/logo.png" alt="GamerXD_GZ">
+        <span>GamerXD_GZ</span>
+    </a>
+
+    <nav>
+        <a href="../index.html">Home</a>
+        <a href="projects.html">Projects</a>
+        <a href="minecraft.html">Minecraft</a>
+        <a href="eaglercraft.html">Eaglercraft</a>
+        <a href="vote.html">Vote</a>
+        <a href="news.html">News</a>
+        <a href="community.html">Community</a>
+        <a href="about.html">About</a>
+        <a href="Settings.html" class="active">Settings</a>
+    </nav>
+</header>
+
+<main>
+    <section class="settings-page">
+        <div class="settings-header">
+            <span class="section-label">WEATHER</span>
+            <h1>Choose your atmosphere</h1>
+        </div>
+
+        <div class="settings-grid" id="weatherGrid">
+            <button class="weather-option active" data-mode="auto" type="button">
+                <small>Live</small>
+                <strong>Auto</strong>
+            </button>
+            <button class="weather-option" data-mode="sunrise" type="button">
+                <small>Morning</small>
+                <strong>Sunrise</strong>
+            </button>
+            <button class="weather-option" data-mode="day" type="button">
+                <small>Bright</small>
+                <strong>Day</strong>
+            </button>
+            <button class="weather-option" data-mode="cloudy" type="button">
+                <small>Soft</small>
+                <strong>Cloudy</strong>
+            </button>
+            <button class="weather-option" data-mode="sunset" type="button">
+                <small>Warm</small>
+                <strong>Sunset</strong>
+            </button>
+            <button class="weather-option" data-mode="dusk" type="button">
+                <small>Evening</small>
+                <strong>Dusk</strong>
+            </button>
+            <button class="weather-option" data-mode="night" type="button">
+                <small>Dark</small>
+                <strong>Night</strong>
+            </button>
+            <button class="weather-option" data-mode="rain" type="button">
+                <small>Wet</small>
+                <strong>Rain</strong>
+            </button>
+            <button class="weather-option" data-mode="snowy" type="button">
+                <small>Cold</small>
+                <strong>Snow</strong>
+            </button>
+            <button class="weather-option" data-mode="foggy" type="button">
+                <small>Misty</small>
+                <strong>Fog</strong>
+            </button>
+            <button class="weather-option" data-mode="thunder" type="button">
+                <small>Storm</small>
+                <strong>Thunder</strong>
+            </button>
+        </div>
+
+        <div class="settings-actions">
+            <button class="button primary" type="button" id="applySettings">Apply Weather</button>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="footer-bottom">
+        <p>© 2026 GamerXD_GZ. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="../script.js"></script>
+<script>
+    const savedMode = localStorage.getItem("gamerxdgz_weather_mode") || "auto";
+    const optionButtons = document.querySelectorAll(".weather-option");
+    const applyButton = document.getElementById("applySettings");
+
+    function setActiveButton(mode) {
+        optionButtons.forEach(button => {
+            button.classList.toggle("active", button.dataset.mode === mode);
+        });
+    }
+
+    optionButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            const mode = button.dataset.mode;
+            setActiveButton(mode);
+            if (window.setWeatherPreset) {
+                window.setWeatherPreset(mode);
+            }
+        });
+    });
+
+    applyButton.addEventListener("click", () => {
+        const activeButton = document.querySelector(".weather-option.active");
+        const mode = activeButton ? activeButton.dataset.mode : "auto";
+        if (window.setWeatherPreset) {
+            window.setWeatherPreset(mode);
+        }
+    });
+
+    setActiveButton(savedMode);
+</script>
+</body>
+</html>
