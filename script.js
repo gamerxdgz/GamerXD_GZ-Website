@@ -230,70 +230,24 @@ function getAIPageTarget() {
     return nested ? '../ai.html' : './ai.html';
 }
 
-function ensureGlobalAIButton() {
-    const pageName = (window.location.pathname || '').split('/').pop();
-    const isSettingsPage = pageName === 'settings.html';
+function removeGlobalAIButton() {
+    const button = document.getElementById('global-ai-button');
+    if (button) button.remove();
+}
 
-    const existingButton = document.getElementById('global-ai-button');
-    if (isSettingsPage) {
-        if (existingButton) existingButton.remove();
-        return;
-    }
+document.addEventListener("DOMContentLoaded", () => {
+    const savedTheme = localStorage.getItem(THEME_KEY) || "purple-blue";
+    applyTheme(savedTheme);
+    removeGlobalAIButton();
+    setupParticles();
+    setupScrollAnimations();
+    setupCardHover();
+});
 
-    const root = document.body || document.documentElement;
-    if (!root) return;
-
-    let aiButton = existingButton;
-    if (!aiButton) {
-        aiButton = document.createElement('button');
-        aiButton.id = 'global-ai-button';
-        aiButton.className = 'ai-button';
-        aiButton.type = 'button';
-        aiButton.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><text x="12" y="16" text-anchor="middle" font-size="8" fill="currentColor">AI</text></svg>';
-        aiButton.title = 'AI Assistant (Alt+A)';
-        aiButton.setAttribute('aria-label', 'Open AI Assistant');
-
-        const handleAIClick = () => {
-            const currentPage = window.location.pathname;
-            if (currentPage.endsWith('/ai.html') || currentPage.endsWith('ai.html')) {
-                const chatInput = document.getElementById('chat-input');
-                if (chatInput) {
-                    chatInput.focus();
-                    return;
-                }
-            }
-
-            const target = new URL(getAIPageTarget(), window.location.href);
-            window.location.href = target.toString();
-        };
-
-        aiButton.addEventListener('click', handleAIClick);
-        root.appendChild(aiButton);
-    }
-
-    aiButton.style.display = 'flex';
-    aiButton.style.opacity = '1';
-    aiButton.style.visibility = 'visible';
-    aiButton.style.position = 'fixed';
-    aiButton.style.bottom = '24px';
-    aiButton.style.right = '24px';
-    aiButton.style.zIndex = '2147483647';
-
-    document.addEventListener('keydown', (e) => {
-        if (e.altKey && e.key && e.key.toLowerCase() === 'a') {
-            e.preventDefault();
-            const currentPage = window.location.pathname;
-            if (currentPage.endsWith('/ai.html') || currentPage.endsWith('ai.html')) {
-                const chatInput = document.getElementById('chat-input');
-                if (chatInput) {
-                    chatInput.focus();
-                    return;
-                }
-            }
-            const target = new URL(getAIPageTarget(), window.location.href);
-            window.location.href = target.toString();
-        }
-    });
+window.addEventListener('pageshow', removeGlobalAIButton);
+window.addEventListener('load', removeGlobalAIButton);
+if (document.readyState !== 'loading') {
+    removeGlobalAIButton();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
