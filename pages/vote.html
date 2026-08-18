@@ -10,6 +10,92 @@
 <link rel="icon" type="image/png" href="../assets/logo.png">
 <link rel="stylesheet" href="../style.css">
 
+<style>
+.page-main {
+    width: min(1100px, calc(100% - 32px));
+    margin: 0 auto;
+}
+
+.vote-hero {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 0;
+}
+
+.vote-content {
+    width: 100%;
+    max-width: 900px;
+    text-align: center;
+}
+
+.vote-content h1 {
+    margin: 0;
+    line-height: 1.05;
+    overflow-wrap: anywhere;
+}
+
+.vote-content h1 span {
+    display: block;
+}
+
+.hero-description {
+    width: min(680px, 100%);
+    margin: 22px auto 32px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+.vote-card {
+    width: 100%;
+    min-width: 0;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: left;
+    overflow: hidden;
+}
+
+.vote-icon {
+    width: 56px;
+    height: 56px;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    margin-bottom: 18px;
+    font-size: 26px;
+    background: rgba(0, 180, 255, 0.12);
+}
+
+.vote-card h2,
+.vote-card p {
+    overflow-wrap: anywhere;
+}
+
+.vote-card h2 {
+    margin: 6px 0 10px;
+}
+
+.vote-card p:last-child {
+    margin-bottom: 0;
+}
+
+@media (max-width: 700px) {
+    .page-main {
+        width: min(100% - 20px, 1100px);
+    }
+
+    .vote-hero {
+        min-height: auto;
+        padding: 55px 0;
+    }
+
+    .vote-card {
+        padding: 22px;
+    }
+}
+</style>
+
 </head>
 
 <body>
@@ -19,8 +105,8 @@
 <header class="navbar">
 
 <a href="../index.html" class="logo">
-<img src="../assets/logo.png" alt="GamerXD_GZ">
-<span>GamerXD_GZ</span>
+    <img src="../assets/logo.png" alt="GamerXD_GZ">
+    <span>GamerXD_GZ</span>
 </a>
 
 <nav>
@@ -40,12 +126,11 @@
 
 </header>
 
+<main class="page-main">
 
-<main>
+<section class="vote-hero">
 
-<section class="hero">
-
-<div class="hero-content">
+<div class="vote-content">
 
 <p class="hero-label">
 COMMUNITY
@@ -57,16 +142,20 @@ GamerXD_GZ
 </h1>
 
 <p class="hero-description">
-Voting features will be added here
-when a supported project is available.
+Help shape the future of GamerXD_GZ.
+Voting features will become available
+when there is a project or community
+decision to vote on.
 </p>
 
-<div class="coming-card">
+<article class="vote-card coming-card">
 
-<div>
+<div class="vote-icon">
+🗳️
+</div>
 
 <p class="section-label">
-STATUS
+VOTING STATUS
 </p>
 
 <h2>
@@ -75,18 +164,17 @@ Coming Soon
 
 <p>
 There is currently nothing to vote for.
+When voting opens, available polls
+will appear here.
 </p>
 
-</div>
-
-</div>
+</article>
 
 </div>
 
 </section>
 
 </main>
-
 
 <footer>
 

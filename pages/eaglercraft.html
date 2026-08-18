@@ -10,6 +10,111 @@
 <link rel="icon" type="image/png" href="../assets/logo.png">
 <link rel="stylesheet" href="../style.css">
 
+<style>
+.page-main {
+    width: min(1100px, calc(100% - 32px));
+    margin: 0 auto;
+}
+
+.project-hero {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 0;
+}
+
+.project-content {
+    width: 100%;
+    max-width: 900px;
+    text-align: center;
+}
+
+.hero-label {
+    margin-bottom: 12px;
+}
+
+.project-content h1 {
+    margin: 0;
+    line-height: 1.05;
+    overflow-wrap: anywhere;
+}
+
+.project-content h1 span {
+    display: block;
+}
+
+.hero-description {
+    width: min(680px, 100%);
+    margin: 22px auto 32px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    width: 100%;
+    text-align: left;
+}
+
+.status-card {
+    min-width: 0;
+    padding: 26px;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.status-card > * {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.status-card h2,
+.status-card p {
+    overflow-wrap: anywhere;
+}
+
+.status-card h2 {
+    margin: 6px 0 10px;
+}
+
+.status-card p:last-child {
+    margin-bottom: 0;
+}
+
+.status-icon {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    margin-bottom: 18px;
+    font-size: 22px;
+    background: rgba(0, 180, 255, 0.12);
+}
+
+@media (max-width: 700px) {
+    .page-main {
+        width: min(100% - 20px, 1100px);
+    }
+
+    .project-hero {
+        min-height: auto;
+        padding: 55px 0;
+    }
+
+    .status-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .status-card {
+        padding: 21px;
+    }
+}
+</style>
+
 </head>
 
 <body>
@@ -19,8 +124,8 @@
 <header class="navbar">
 
 <a href="../index.html" class="logo">
-<img src="../assets/logo.png" alt="GamerXD_GZ">
-<span>GamerXD_GZ</span>
+    <img src="../assets/logo.png" alt="GamerXD_GZ">
+    <span>GamerXD_GZ</span>
 </a>
 
 <nav>
@@ -40,12 +145,11 @@
 
 </header>
 
+<main class="page-main">
 
-<main>
+<section class="project-hero">
 
-<section class="hero">
-
-<div class="hero-content">
+<div class="project-content">
 
 <p class="hero-label">
 FUTURE PROJECT
@@ -57,17 +161,21 @@ GamerXD_GZ
 </h1>
 
 <p class="hero-description">
-An Eaglercraft-related GamerXD_GZ
-project may happen in the distant
-future.
+A possible future GamerXD_GZ Eaglercraft
+project. Development has not started yet,
+but the project may return in the future.
 </p>
 
-<div class="coming-card">
+<div class="status-grid">
 
-<div>
+<article class="status-card coming-card">
+
+<div class="status-icon">
+🌐
+</div>
 
 <p class="section-label">
-STATUS
+PROJECT STATUS
 </p>
 
 <h2>
@@ -79,7 +187,30 @@ There is currently no active
 GamerXD_GZ Eaglercraft project.
 </p>
 
+</article>
+
+
+<article class="status-card coming-card">
+
+<div class="status-icon">
+🚀
 </div>
+
+<p class="section-label">
+FUTURE PLANS
+</p>
+
+<h2>
+Maybe Someday
+</h2>
+
+<p>
+This project is currently on hold.
+Updates will be posted on the website
+if development begins.
+</p>
+
+</article>
 
 </div>
 
@@ -88,7 +219,6 @@ GamerXD_GZ Eaglercraft project.
 </section>
 
 </main>
-
 
 <footer>
 
