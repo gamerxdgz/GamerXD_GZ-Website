@@ -10,6 +10,12 @@ window.fetchWeatherWithLocation = function fetchWeatherWithLocation() {};
 
 const THEME_KEY = "gamerxdgz_theme";
 
+/*
+   AI Worker
+   This is separate from the Cloudflare Pages website.
+*/
+const AI_API_URL = "https://gamerxdgz.workers.dev/api/chat";
+
 const GRADIENT_THEMES = {
     "purple-blue": {
         "--bg-top": "#1d1237",
@@ -19,7 +25,7 @@ const GRADIENT_THEMES = {
         "--card-bg-1": "rgba(255,255,255,0.18)",
         "--card-bg-2": "rgba(126,132,255,0.12)",
         "--card-border": "rgba(255,255,255,0.28)",
-        "--card-shadow": "0 18px 45px rgba(96, 77, 204, 0.22)",
+        "--card-shadow": "0 18px 45px rgba(96,77,204,0.22)",
         "--card-text": "rgba(255,255,255,0.96)",
         "--card-muted": "rgba(235,240,255,0.72)"
     },
@@ -32,7 +38,7 @@ const GRADIENT_THEMES = {
         "--card-bg-1": "rgba(255,255,255,0.16)",
         "--card-bg-2": "rgba(98,138,255,0.12)",
         "--card-border": "rgba(198,219,255,0.28)",
-        "--card-shadow": "0 18px 45px rgba(59, 97, 255, 0.2)",
+        "--card-shadow": "0 18px 45px rgba(59,97,255,0.2)",
         "--card-text": "rgba(255,255,255,0.96)",
         "--card-muted": "rgba(222,231,255,0.74)"
     },
@@ -45,7 +51,7 @@ const GRADIENT_THEMES = {
         "--card-bg-1": "rgba(255,255,255,0.15)",
         "--card-bg-2": "rgba(90,220,210,0.1)",
         "--card-border": "rgba(200,255,247,0.24)",
-        "--card-shadow": "0 18px 45px rgba(30, 143, 165, 0.22)",
+        "--card-shadow": "0 18px 45px rgba(30,143,165,0.22)",
         "--card-text": "rgba(245,255,255,0.97)",
         "--card-muted": "rgba(220,245,242,0.72)"
     },
@@ -58,7 +64,7 @@ const GRADIENT_THEMES = {
         "--card-bg-1": "rgba(255,255,255,0.14)",
         "--card-bg-2": "rgba(86,222,181,0.12)",
         "--card-border": "rgba(214,255,240,0.24)",
-        "--card-shadow": "0 18px 45px rgba(43, 168, 154, 0.2)",
+        "--card-shadow": "0 18px 45px rgba(43,168,154,0.2)",
         "--card-text": "rgba(245,255,250,0.97)",
         "--card-muted": "rgba(220,244,236,0.72)"
     },
@@ -71,7 +77,7 @@ const GRADIENT_THEMES = {
         "--card-bg-1": "rgba(255,255,255,0.14)",
         "--card-bg-2": "rgba(255,123,155,0.12)",
         "--card-border": "rgba(255,221,230,0.24)",
-        "--card-shadow": "0 18px 45px rgba(199, 72, 120, 0.2)",
+        "--card-shadow": "0 18px 45px rgba(199,72,120,0.2)",
         "--card-text": "rgba(255,250,252,0.97)",
         "--card-muted": "rgba(255,230,237,0.72)"
     },
@@ -84,7 +90,7 @@ const GRADIENT_THEMES = {
         "--card-bg-1": "rgba(255,255,255,0.14)",
         "--card-bg-2": "rgba(113,163,255,0.12)",
         "--card-border": "rgba(255,210,218,0.24)",
-        "--card-shadow": "0 18px 45px rgba(55, 104, 255, 0.2)",
+        "--card-shadow": "0 18px 45px rgba(55,104,255,0.2)",
         "--card-text": "rgba(255,248,249,0.97)",
         "--card-muted": "rgba(227,235,255,0.74)"
     },
@@ -97,7 +103,7 @@ const GRADIENT_THEMES = {
         "--card-bg-1": "rgba(255,255,255,0.15)",
         "--card-bg-2": "rgba(230,115,170,0.12)",
         "--card-border": "rgba(255,220,235,0.26)",
-        "--card-shadow": "0 18px 45px rgba(153, 79, 224, 0.2)",
+        "--card-shadow": "0 18px 45px rgba(153,79,224,0.2)",
         "--card-text": "rgba(255,247,250,0.97)",
         "--card-muted": "rgba(255,228,238,0.74)"
     },
@@ -110,7 +116,7 @@ const GRADIENT_THEMES = {
         "--card-bg-1": "rgba(255,255,255,0.14)",
         "--card-bg-2": "rgba(197,111,220,0.12)",
         "--card-border": "rgba(255,220,240,0.26)",
-        "--card-shadow": "0 18px 45px rgba(204, 86, 126, 0.2)",
+        "--card-shadow": "0 18px 45px rgba(204,86,126,0.2)",
         "--card-text": "rgba(255,247,250,0.97)",
         "--card-muted": "rgba(255,233,243,0.72)"
     },
@@ -123,7 +129,7 @@ const GRADIENT_THEMES = {
         "--card-bg-1": "rgba(255,255,255,0.16)",
         "--card-bg-2": "rgba(99,203,255,0.12)",
         "--card-border": "rgba(220,255,255,0.24)",
-        "--card-shadow": "0 18px 45px rgba(72, 94, 255, 0.2)",
+        "--card-shadow": "0 18px 45px rgba(72,94,255,0.2)",
         "--card-text": "rgba(244,251,255,0.97)",
         "--card-muted": "rgba(220,239,255,0.74)"
     },
@@ -136,7 +142,7 @@ const GRADIENT_THEMES = {
         "--card-bg-1": "rgba(255,255,255,0.15)",
         "--card-bg-2": "rgba(113,97,255,0.12)",
         "--card-border": "rgba(214,224,255,0.24)",
-        "--card-shadow": "0 18px 45px rgba(42, 169, 204, 0.2)",
+        "--card-shadow": "0 18px 45px rgba(42,169,204,0.2)",
         "--card-text": "rgba(245,249,255,0.97)",
         "--card-muted": "rgba(220,228,255,0.74)"
     },
@@ -149,7 +155,7 @@ const GRADIENT_THEMES = {
         "--card-bg-1": "rgba(255,255,255,0.08)",
         "--card-bg-2": "rgba(136,150,166,0.08)",
         "--card-border": "rgba(255,255,255,0.12)",
-        "--card-shadow": "0 18px 45px rgba(0, 0, 0, 0.46)",
+        "--card-shadow": "0 18px 45px rgba(0,0,0,0.46)",
         "--card-text": "rgba(255,255,255,0.98)",
         "--card-muted": "rgba(210,216,226,0.74)"
     }
@@ -287,8 +293,7 @@ function setupParticles() {
 
     function animate() {
         drawParticles();
-        animationFrame =
-            requestAnimationFrame(animate);
+        animationFrame = requestAnimationFrame(animate);
     }
 
     animate();
@@ -572,7 +577,7 @@ function setupAIChat() {
             try {
                 const response =
                     await fetch(
-                        "/api/chat",
+                        AI_API_URL,
                         {
                             method: "POST",
 
@@ -595,7 +600,7 @@ function setupAIChat() {
                         "content-type"
                     ) || "";
 
-                let data = null;
+                let data;
 
                 if (
                     contentType.includes(
