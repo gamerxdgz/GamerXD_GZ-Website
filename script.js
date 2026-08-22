@@ -1,14 +1,15 @@
 "use strict";
 
 /* =========================================
-   GamerXD_GZ Website Effects
-   Simple, clean, and customizable
+   GamerXD_GZ Website
+   Main Website JavaScript
 ========================================= */
 
 window.setWeatherPreset = function setWeatherPreset() {};
 window.fetchWeatherWithLocation = function fetchWeatherWithLocation() {};
 
 const THEME_KEY = "gamerxdgz_theme";
+
 const GRADIENT_THEMES = {
     "purple-blue": {
         "--bg-top": "#1d1237",
@@ -22,6 +23,7 @@ const GRADIENT_THEMES = {
         "--card-text": "rgba(255,255,255,0.96)",
         "--card-muted": "rgba(235,240,255,0.72)"
     },
+
     "blue-purple": {
         "--bg-top": "#102a52",
         "--bg-mid": "#3a57c8",
@@ -34,6 +36,7 @@ const GRADIENT_THEMES = {
         "--card-text": "rgba(255,255,255,0.96)",
         "--card-muted": "rgba(222,231,255,0.74)"
     },
+
     "blue-green": {
         "--bg-top": "#0d2944",
         "--bg-mid": "#1f5f9b",
@@ -46,6 +49,7 @@ const GRADIENT_THEMES = {
         "--card-text": "rgba(245,255,255,0.97)",
         "--card-muted": "rgba(220,245,242,0.72)"
     },
+
     "green-blue": {
         "--bg-top": "#092b2d",
         "--bg-mid": "#1b9a8c",
@@ -58,6 +62,7 @@ const GRADIENT_THEMES = {
         "--card-text": "rgba(245,255,250,0.97)",
         "--card-muted": "rgba(220,244,236,0.72)"
     },
+
     "red-blue": {
         "--bg-top": "#341827",
         "--bg-mid": "#7c2e5f",
@@ -70,6 +75,7 @@ const GRADIENT_THEMES = {
         "--card-text": "rgba(255,250,252,0.97)",
         "--card-muted": "rgba(255,230,237,0.72)"
     },
+
     "blue-red": {
         "--bg-top": "#101f46",
         "--bg-mid": "#2e67d4",
@@ -82,6 +88,7 @@ const GRADIENT_THEMES = {
         "--card-text": "rgba(255,248,249,0.97)",
         "--card-muted": "rgba(227,235,255,0.74)"
     },
+
     "purple-red": {
         "--bg-top": "#2a1239",
         "--bg-mid": "#6b349f",
@@ -94,6 +101,7 @@ const GRADIENT_THEMES = {
         "--card-text": "rgba(255,247,250,0.97)",
         "--card-muted": "rgba(255,228,238,0.74)"
     },
+
     "red-purple": {
         "--bg-top": "#3d1225",
         "--bg-mid": "#c24560",
@@ -106,6 +114,7 @@ const GRADIENT_THEMES = {
         "--card-text": "rgba(255,247,250,0.97)",
         "--card-muted": "rgba(255,233,243,0.72)"
     },
+
     "violet-cyan": {
         "--bg-top": "#26153f",
         "--bg-mid": "#4a4ae7",
@@ -118,6 +127,7 @@ const GRADIENT_THEMES = {
         "--card-text": "rgba(244,251,255,0.97)",
         "--card-muted": "rgba(220,239,255,0.74)"
     },
+
     "cyan-violet": {
         "--bg-top": "#0d1d2e",
         "--bg-mid": "#2aa9cc",
@@ -130,6 +140,7 @@ const GRADIENT_THEMES = {
         "--card-text": "rgba(245,249,255,0.97)",
         "--card-muted": "rgba(220,228,255,0.74)"
     },
+
     "black": {
         "--bg-top": "#030507",
         "--bg-mid": "#0b0f16",
@@ -144,23 +155,43 @@ const GRADIENT_THEMES = {
     }
 };
 
+/* =========================================
+   Theme System
+========================================= */
+
 function applyTheme(themeName) {
-    const theme = GRADIENT_THEMES[themeName] || GRADIENT_THEMES["purple-blue"];
+    const theme =
+        GRADIENT_THEMES[themeName] ||
+        GRADIENT_THEMES["purple-blue"];
+
     Object.entries(theme).forEach(([key, value]) => {
         document.documentElement.style.setProperty(key, value);
     });
-    localStorage.setItem(THEME_KEY, themeName);
+
+    try {
+        localStorage.setItem(THEME_KEY, themeName);
+    } catch (error) {
+        console.warn("Unable to save theme preference.");
+    }
 }
 
 window.applyTheme = applyTheme;
+
+/* =========================================
+   Particles
+========================================= */
 
 const PARTICLE_LIMIT = 90;
 
 function setupParticles() {
     const canvas = document.getElementById("particles");
+
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
+
+    if (!ctx) return;
+
     const particles = [];
 
     let width = window.innerWidth;
@@ -169,11 +200,35 @@ function setupParticles() {
     function resizeCanvas() {
         width = window.innerWidth;
         height = window.innerHeight;
-        canvas.width = width;
-        canvas.height = height;
+
+        const pixelRatio =
+            Math.min(window.devicePixelRatio || 1, 2);
+
+        canvas.width = width * pixelRatio;
+        canvas.height = height * pixelRatio;
+
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+
+        ctx.setTransform(
+            pixelRatio,
+            0,
+            0,
+            pixelRatio,
+            0,
+            0
+        );
 
         particles.length = 0;
-        const targetCount = Math.min(PARTICLE_LIMIT, Math.max(42, Math.round((width * height) / 24)));
+
+        const targetCount = Math.min(
+            PARTICLE_LIMIT,
+            Math.max(
+                42,
+                Math.round((width * height) / 24000)
+            )
+        );
+
         for (let i = 0; i < targetCount; i++) {
             particles.push({
                 x: Math.random() * width,
@@ -193,455 +248,472 @@ function setupParticles() {
             particle.x += particle.vx;
             particle.y += particle.vy;
 
-            if (particle.x < -10) particle.x = width + 10;
-            if (particle.x > width + 10) particle.x = -10;
-            if (particle.y < -10) particle.y = height + 10;
-            if (particle.y > height + 10) particle.y = -10;
+            if (particle.x < -10) {
+                particle.x = width + 10;
+            }
 
-            ctx.fillStyle = `rgba(255,255,255,${particle.alpha})`;
+            if (particle.x > width + 10) {
+                particle.x = -10;
+            }
+
+            if (particle.y < -10) {
+                particle.y = height + 10;
+            }
+
+            if (particle.y > height + 10) {
+                particle.y = -10;
+            }
+
+            ctx.fillStyle =
+                `rgba(255,255,255,${particle.alpha})`;
+
             ctx.beginPath();
-            ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+
+            ctx.arc(
+                particle.x,
+                particle.y,
+                particle.radius,
+                0,
+                Math.PI * 2
+            );
+
             ctx.fill();
         });
     }
 
     resizeCanvas();
 
+    let animationFrame;
+
     function animate() {
         drawParticles();
-        requestAnimationFrame(animate);
+        animationFrame =
+            requestAnimationFrame(animate);
     }
 
-    window.addEventListener("resize", resizeCanvas);
     animate();
+
+    window.addEventListener(
+        "resize",
+        resizeCanvas,
+        { passive: true }
+    );
+
+    window.addEventListener(
+        "pagehide",
+        () => {
+            cancelAnimationFrame(animationFrame);
+        },
+        { once: true }
+    );
 }
-
-/* =========================================
-   Bootstrap
-========================================= */
-
-document.addEventListener('visibilitychange', () => {
-    if (document.hidden) return;
-});
-
-function getAIPageTarget() {
-    const path = window.location.pathname || '';
-    const nested = path.includes('/pages/');
-    return nested ? '../ai.html' : './ai.html';
-}
-
-function removeGlobalAIButton() {
-    const button = document.getElementById('global-ai-button');
-    if (button) button.remove();
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    const savedTheme = localStorage.getItem(THEME_KEY) || "purple-blue";
-    applyTheme(savedTheme);
-    removeGlobalAIButton();
-    setupParticles();
-    setupScrollAnimations();
-    setupCardHover();
-});
-
-window.addEventListener('pageshow', removeGlobalAIButton);
-window.addEventListener('load', removeGlobalAIButton);
-if (document.readyState !== 'loading') {
-    removeGlobalAIButton();
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    const savedTheme = localStorage.getItem(THEME_KEY) || "purple-blue";
-    applyTheme(savedTheme);
-    ensureGlobalAIButton();
-    setupParticles();
-    setupScrollAnimations();
-    setupCardHover();
-});
-
-window.addEventListener('pageshow', ensureGlobalAIButton);
-window.addEventListener('load', ensureGlobalAIButton);
-if (document.readyState !== 'loading') {
-    ensureGlobalAIButton();
-}
-
-/* =========================================
-   Global AI Assistant Button
-========================================= */
-
-
 
 /* =========================================
    Scroll Animations
 ========================================= */
 
 function setupScrollAnimations() {
-
     const elements =
         document.querySelectorAll(".reveal");
 
     if (!elements.length) return;
 
+    if (!("IntersectionObserver" in window)) {
+        elements.forEach(element => {
+            element.classList.add("show");
+        });
+
+        return;
+    }
 
     const observer =
         new IntersectionObserver(
             entries => {
-
                 entries.forEach(entry => {
-
                     if (entry.isIntersecting) {
-
-                        entry.target.classList.add(
-                            "show"
-                        );
-
+                        entry.target.classList.add("show");
+                        observer.unobserve(entry.target);
                     }
-
                 });
-
             },
             {
                 threshold: 0.15
             }
         );
 
-
     elements.forEach(element => {
         observer.observe(element);
     });
-
 }
 
-
 /* =========================================
-   Cursor Glow
-========================================= */
-
-function setupCursorGlow() {
-
-    const glow =
-        document.createElement("div");
-
-    glow.className =
-        "cursor-glow";
-
-    document.body.appendChild(glow);
-
-
-    document.addEventListener(
-        "mousemove",
-        event => {
-
-            glow.style.left =
-                `${event.clientX}px`;
-
-            glow.style.top =
-                `${event.clientY}px`;
-
-        }
-    );
-
-}
-
-
-/* =========================================
-   Simple Card Hover
+   Card Hover
 ========================================= */
 
 function setupCardHover() {
-
     const cards =
         document.querySelectorAll(
             ".feature-card, .project-card, .coming-card"
         );
 
-
     cards.forEach(card => {
-
         card.addEventListener(
             "mouseenter",
             () => {
-
-                card.classList.add(
-                    "card-hover"
-                );
-
+                card.classList.add("card-hover");
             }
         );
-
 
         card.addEventListener(
             "mouseleave",
             () => {
-
-                card.classList.remove(
-                    "card-hover"
-                );
-
+                card.classList.remove("card-hover");
             }
         );
-
     });
-
 }
 
-
 /* =========================================
-   COPY PROTECTION
+   Copy Protection
 ========================================= */
-
-
-/*
-    This does NOT make a website impossible
-    to copy.
-
-    It only blocks common casual copying.
-*/
-
 
 document.addEventListener(
     "contextmenu",
     event => {
-
         event.preventDefault();
-
     }
 );
-
 
 document.addEventListener(
     "selectstart",
     event => {
+        const target = event.target;
+
+        if (
+            target instanceof HTMLInputElement ||
+            target instanceof HTMLTextAreaElement
+        ) {
+            return;
+        }
 
         event.preventDefault();
-
     }
 );
-
 
 document.addEventListener(
     "dragstart",
     event => {
-
-        event.preventDefault();
-
+        if (
+            event.target instanceof HTMLImageElement
+        ) {
+            event.preventDefault();
+        }
     }
 );
-
 
 document.addEventListener(
     "copy",
     event => {
+        const target = event.target;
+
+        if (
+            target instanceof HTMLInputElement ||
+            target instanceof HTMLTextAreaElement
+        ) {
+            return;
+        }
 
         event.preventDefault();
-
     }
 );
-
 
 document.addEventListener(
     "cut",
     event => {
+        const target = event.target;
+
+        if (
+            target instanceof HTMLInputElement ||
+            target instanceof HTMLTextAreaElement
+        ) {
+            return;
+        }
 
         event.preventDefault();
-
     }
 );
-
 
 document.addEventListener(
     "paste",
     event => {
-
-        /*
-            Allow typing into normal form fields
-            if you add them later.
-        */
-
-        const tag =
-            event.target.tagName;
+        const target = event.target;
 
         if (
-            tag !== "INPUT" &&
-            tag !== "TEXTAREA"
+            target instanceof HTMLInputElement ||
+            target instanceof HTMLTextAreaElement
         ) {
-
-            event.preventDefault();
-
+            return;
         }
 
+        event.preventDefault();
     }
 );
 
-
 /* =========================================
-   KEYBOARD PROTECTION
+   Keyboard Protection
 ========================================= */
 
 document.addEventListener(
     "keydown",
     event => {
-
         const key =
             event.key.toLowerCase();
 
-
-        /* CTRL / CMD + C */
-
-        if (
-            (event.ctrlKey || event.metaKey) &&
-            key === "c"
-        ) {
-
-            event.preventDefault();
-
-        }
-
-
-        /* CTRL / CMD + X */
+        const modifier =
+            event.ctrlKey ||
+            event.metaKey;
 
         if (
-            (event.ctrlKey || event.metaKey) &&
-            key === "x"
+            modifier &&
+            ["c", "x", "u", "s"].includes(key)
         ) {
-
             event.preventDefault();
-
         }
 
-
-        /* CTRL / CMD + U */
-
-        if (
-            (event.ctrlKey || event.metaKey) &&
-            key === "u"
-        ) {
-
+        if (event.key === "F12") {
             event.preventDefault();
-
         }
-
-
-        /* CTRL / CMD + S */
-
-        if (
-            (event.ctrlKey || event.metaKey) &&
-            key === "s"
-        ) {
-
-            event.preventDefault();
-
-        }
-
-
-        /*
-            Developer tools shortcuts.
-
-            These are only a deterrent.
-        */
-
-        if (
-            event.key === "F12"
-        ) {
-
-            event.preventDefault();
-
-        }
-
 
         if (
             event.ctrlKey &&
             event.shiftKey &&
             ["i", "j", "c"].includes(key)
         ) {
-
             event.preventDefault();
-
         }
-
     }
 );
 
-
 /* =========================================
-   IMAGE PROTECTION
+   Image Protection
 ========================================= */
 
-document.querySelectorAll(
-    "img"
-).forEach(
-    image => {
-
-        image.setAttribute(
-            "draggable",
-            "false"
-        );
+function setupImageProtection() {
+    document.querySelectorAll("img").forEach(image => {
+        image.setAttribute("draggable", "false");
 
         image.addEventListener(
             "dragstart",
-            event =>
-                event.preventDefault()
+            event => {
+                event.preventDefault();
+            }
         );
-
-    }
-);
-// --- GamerXD_GZ AI Chatbot Logic ---
-document.addEventListener('DOMContentLoaded', () => {
-    const chatForm = document.getElementById('chat-form');
-    const chatInput = document.getElementById('chat-input');
-    const chatMessages = document.getElementById('chat-messages');
-    const chatSubmit = document.getElementById('chat-submit');
-
-    if (!chatForm) return; // Safely skips this code on pages without the chat form
-
-    chatForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const messageText = chatInput.value.trim();
-        if (!messageText) return;
-
-        // Render User Message
-        appendMessage('user', messageText);
-        chatInput.value = '';
-        chatSubmit.disabled = true;
-
-        // Render Loading Indicator
-        const loadingDiv = appendMessage('bot', 'Thinking...');
-
-        try {
-            const res = await fetch('/api/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: messageText })
-            });
-
-            if (!res.ok) {
-                throw new Error(`HTTP error! status: ${res.status}`);
-            }
-
-            const data = await res.json();
-            
-            if (data.error) {
-                loadingDiv.textContent = `Error: ${data.error}`;
-            } else if (data.response) {
-                loadingDiv.textContent = data.response;
-            } else {
-                loadingDiv.textContent = "Sorry, I couldn't process that response.";
-            }
-        } catch (error) {
-            console.error("Chat error:", error);
-            loadingDiv.textContent = "Error: Unable to connect to GamerXD AI backend. Make sure the Cloudflare Worker is deployed.";
-        } finally {
-            chatSubmit.disabled = false;
-        }
     });
+}
+
+/* =========================================
+   GamerXD_GZ AI Assistant
+========================================= */
+
+function setupAIChat() {
+    const chatForm =
+        document.getElementById("chat-form");
+
+    const chatInput =
+        document.getElementById("chat-input");
+
+    const chatMessages =
+        document.getElementById("chat-messages");
+
+    const chatSubmit =
+        document.getElementById("chat-submit");
+
+    if (
+        !chatForm ||
+        !chatInput ||
+        !chatMessages
+    ) {
+        return;
+    }
+
+    let isSending = false;
+
+    chatForm.addEventListener(
+        "submit",
+        async event => {
+            event.preventDefault();
+
+            if (isSending) return;
+
+            const messageText =
+                chatInput.value.trim();
+
+            if (!messageText) return;
+
+            isSending = true;
+
+            appendMessage(
+                "user",
+                messageText
+            );
+
+            chatInput.value = "";
+
+            if (chatSubmit) {
+                chatSubmit.disabled = true;
+            }
+
+            const loadingMessage =
+                appendMessage(
+                    "bot",
+                    "Thinking..."
+                );
+
+            try {
+                const response =
+                    await fetch(
+                        "/api/chat",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json",
+                                "Accept":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+                                message:
+                                    messageText
+                            })
+                        }
+                    );
+
+                const contentType =
+                    response.headers.get(
+                        "content-type"
+                    ) || "";
+
+                let data = null;
+
+                if (
+                    contentType.includes(
+                        "application/json"
+                    )
+                ) {
+                    data =
+                        await response.json();
+                } else {
+                    const text =
+                        await response.text();
+
+                    data = {
+                        response: text
+                    };
+                }
+
+                if (!response.ok) {
+                    throw new Error(
+                        data?.error ||
+                        `Request failed with status ${response.status}`
+                    );
+                }
+
+                if (data?.error) {
+                    loadingMessage.textContent =
+                        `Error: ${data.error}`;
+
+                    return;
+                }
+
+                const botResponse =
+                    data?.response ||
+                    data?.message ||
+                    data?.reply;
+
+                if (botResponse) {
+                    loadingMessage.textContent =
+                        String(botResponse);
+                } else {
+                    loadingMessage.textContent =
+                        "Sorry, I couldn't process that response.";
+                }
+
+            } catch (error) {
+                console.error(
+                    "GamerXD_GZ AI error:",
+                    error
+                );
+
+                loadingMessage.textContent =
+                    "Unable to connect to GamerXD_GZ AI right now. Please try again later.";
+
+            } finally {
+                isSending = false;
+
+                if (chatSubmit) {
+                    chatSubmit.disabled = false;
+                }
+
+                chatInput.focus();
+            }
+        }
+    );
 
     function appendMessage(sender, text) {
-        const msgDiv = document.createElement('div');
-        msgDiv.classList.add('msg', sender);
-        msgDiv.textContent = text;
-        chatMessages.appendChild(msgDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-        return msgDiv;
+        const message =
+            document.createElement("div");
+
+        message.className =
+            `msg ${sender}`;
+
+        message.textContent =
+            String(text);
+
+        chatMessages.appendChild(message);
+
+        chatMessages.scrollTop =
+            chatMessages.scrollHeight;
+
+        return message;
     }
-});
+}
+
+/* =========================================
+   Main Bootstrap
+========================================= */
+
+function initializeWebsite() {
+    let savedTheme = "purple-blue";
+
+    try {
+        savedTheme =
+            localStorage.getItem(THEME_KEY) ||
+            "purple-blue";
+    } catch (error) {
+        console.warn(
+            "Unable to read saved theme."
+        );
+    }
+
+    applyTheme(savedTheme);
+
+    setupParticles();
+    setupScrollAnimations();
+    setupCardHover();
+    setupImageProtection();
+    setupAIChat();
+}
+
+if (
+    document.readyState === "loading"
+) {
+    document.addEventListener(
+        "DOMContentLoaded",
+        initializeWebsite,
+        { once: true }
+    );
+} else {
+    initializeWebsite();
+}
