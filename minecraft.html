@@ -1,572 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <meta
-        name="description"
-        content="Minecraft information for GamerXD_GZ's Server."
-    >
-
-    <meta
-        name="theme-color"
-        content="#080b14"
-    >
-
-    <meta
-        name="robots"
-        content="index, follow"
-    >
-
-    <title>Minecraft — GamerXD_GZ's Server</title>
-
-    <link
-        rel="icon"
-        type="image/png"
-        href="assets/logo.png"
-    >
-
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The GamerXD_GZ LifeSteal SMP — a Minecraft community server with a player economy, bounties, and team play.">
+<meta name="theme-color" content="#060810">
+<meta name="robots" content="index, follow">
+<title>Minecraft — GamerXD_GZ</title>
+<link rel="icon" type="image/png" href="assets/logo.png">
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+<div class="bg-field" aria-hidden="true"></div>
 
-    <!-- LOADER -->
+<header class="site-header">
+  <div class="wrap nav-row">
+    <a href="index.html" class="brand" aria-label="GamerXD_GZ home">
+      <span class="brand-logo"><img src="assets/logo.png" alt="" width="36" height="36"></span>
+      <span class="brand-text">GamerXD_GZ</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="projects.html">Projects</a>
+      <a href="minecraft.html" class="is-active">Minecraft</a>
+    </nav>
+    <a href="https://discord.gg/4BHUKrzXRf" class="btn btn-bolt nav-cta" target="_blank" rel="noopener noreferrer">Join Discord</a>
+    <button class="menu-btn" id="menuBtn" type="button" aria-label="Open navigation" aria-expanded="false">
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
 
-    <div
-        id="loader"
-        class="loader"
-        aria-hidden="true"
-    >
-
-        <div class="loader-content">
-
-            <div class="loader-logo">
-
-                <img
-                    src="assets/logo.png"
-                    alt=""
-                    width="72"
-                    height="72"
-                >
-
-            </div>
-
-            <div class="loader-name">
-                GamerXD_GZ
-            </div>
-
-            <div class="loader-line">
-                <span></span>
-            </div>
-
+<main>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="hero-tag">Minecraft server</div>
+        <h1>The LifeSteal <span class="accent">SMP.</span></h1>
+        <p class="lede">A survival Minecraft world where killing a player steals a heart from their max health, and dying costs you your own. It's the live testbed for everything I build — plugins, economy, and community features alike.</p>
+        <div class="hero-actions">
+          <a href="https://discord.gg/CgfPRMrCQH" class="btn btn-bolt" target="_blank" rel="noopener noreferrer">Get the IP on Discord</a>
+          <a href="projects.html" class="btn btn-line">See the plugins behind it</a>
         </div>
+      </div>
 
+      <div class="spec cut">
+        <div class="spec-top"><span>Server</span><span>LifeSteal SMP</span></div>
+        <div class="spec-row"><span>Game mode</span><strong>LifeSteal survival</strong></div>
+        <div class="spec-row"><span>Economy</span><strong>Player-driven, Vault-based</strong></div>
+        <div class="spec-row"><span>PvP</span><strong>Team-toggleable</strong></div>
+        <div class="spec-row"><span>Access</span><strong>Open via Discord</strong></div>
+      </div>
     </div>
+  </section>
 
+  <section class="section section-alt">
+    <div class="wrap">
+      <div class="head">
+        <div class="hero-tag">What's on the server</div>
+        <h2>Built for players who like systems, not just survival.</h2>
+      </div>
+      <div class="grid-3">
+        <article class="panel cut">
+          <h3>Bounties</h3>
+          <p>Put a bounty on another player's head — whoever gets the kill collects the reward straight from the server economy.</p>
+        </article>
+        <article class="panel cut">
+          <h3>Player economy</h3>
+          <p>Earn money by trading with other players or selling items through the in-game shop, then spend it however you like.</p>
+        </article>
+        <article class="panel cut">
+          <h3>Teams</h3>
+          <p>Form a team with an invite system, a shared team home, no-PvP by default, and a private channel to coordinate in.</p>
+        </article>
+      </div>
+    </div>
+  </section>
 
-    <!-- HEADER -->
-
-    <header class="site-header">
-
-        <div class="container nav-container">
-
-            <a
-                href="index.html"
-                class="brand"
-                aria-label="GamerXD_GZ's Server home"
-            >
-
-                <span class="brand-logo">
-
-                    <img
-                        src="assets/logo.png"
-                        alt=""
-                        width="40"
-                        height="40"
-                    >
-
-                </span>
-
-                <span class="brand-text">
-                    GamerXD_GZ
-                </span>
-
-            </a>
-
-
-            <nav
-                class="navigation"
-                id="navigation"
-                aria-label="Main navigation"
-            >
-
-                <a
-                    href="index.html"
-                    class="nav-link"
-                >
-                    Home
-                </a>
-
-                <a
-                    href="index.html#about"
-                    class="nav-link"
-                >
-                    About
-                </a>
-
-                <a
-                    href="index.html#discord"
-                    class="nav-link"
-                >
-                    Discord
-                </a>
-
-                <a
-                    href="minecraft.html"
-                    class="nav-link"
-                >
-                    Minecraft
-                </a>
-
-            </nav>
-
-
-            <a
-                href="https://discord.gg/4BHUKrzXRf"
-                class="nav-button"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                Join Discord
-            </a>
-
-
-            <button
-                class="mobile-menu"
-                id="mobileMenu"
-                type="button"
-                aria-label="Open navigation"
-                aria-expanded="false"
-            >
-
-                <span></span>
-                <span></span>
-
-            </button>
-
+  <section class="section">
+    <div class="wrap">
+      <div class="cta-band cut">
+        <div>
+          <h2>Ready to join?</h2>
+          <p>Server details and the current IP are posted in the Discord.</p>
         </div>
-
-    </header>
-
-
-    <main>
-
-        <!-- MINECRAFT HERO -->
-
-        <section class="hero">
-
-            <div class="hero-grid"></div>
-
-            <div class="container hero-container">
-
-                <div class="hero-content">
-
-                    <div class="hero-kicker">
-
-                        <span class="kicker-line"></span>
-
-                        MINECRAFT
-
-                    </div>
-
-
-                    <h1>
-                        Minecraft
-                        <span>is being explored.</span>
-                    </h1>
-
-
-                    <p class="hero-description">
-                        We're considering a Minecraft
-                        server for GamerXD_GZ's Server.
-                        Nothing has been finalized yet.
-                    </p>
-
-
-                    <div class="hero-actions">
-
-                        <a
-                            href="index.html"
-                            class="button button-primary"
-                        >
-                            Back home
-                            <span aria-hidden="true">←</span>
-                        </a>
-
-                        <a
-                            href="https://discord.gg/4BHUKrzXRf"
-                            class="button button-ghost"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            Discord
-                            <span aria-hidden="true">↗</span>
-                        </a>
-
-                    </div>
-
-                </div>
-
-
-                <div class="hero-side">
-
-                    <div class="hero-card glass">
-
-                        <div class="hero-card-top">
-
-                            <span>
-                                SERVER STATUS
-                            </span>
-
-                            <span>
-                                PLANNING
-                            </span>
-
-                        </div>
-
-
-                        <div class="hero-card-logo">
-
-                            <img
-                                src="assets/logo.png"
-                                alt="GamerXD_GZ logo"
-                                width="88"
-                                height="88"
-                            >
-
-                        </div>
-
-
-                        <div class="hero-card-bottom">
-
-                            <strong>
-                                Minecraft
-                            </strong>
-
-                            <span>
-                                Currently being researched
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="hero-bottom">
-
-                <div class="container hero-bottom-inner">
-
-                    <span>
-                        MINECRAFT PROJECT
-                    </span>
-
-                    <span>
-                        PLANNING
-                    </span>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- INFORMATION -->
-
-        <section class="section">
-
-            <div class="container">
-
-                <div class="section-heading">
-
-                    <div class="section-number">
-                        01
-                    </div>
-
-                    <div>
-
-                        <div class="eyebrow">
-                            CURRENT STATUS
-                        </div>
-
-                        <h2>
-                            Still in the
-                            <span>planning stage.</span>
-                        </h2>
-
-                    </div>
-
-                </div>
-
-
-                <div class="about-layout">
-
-                    <div class="about-copy">
-
-                        <p class="large-copy">
-                            A Minecraft server may be
-                            created in the future.
-                        </p>
-
-                        <p>
-                            We're looking into hosting,
-                            server setup, networking,
-                            gameplay, moderation, and
-                            other requirements before
-                            making any final decisions.
-                        </p>
-
-                    </div>
-
-
-                    <div class="about-details glass-light">
-
-                        <div class="detail-heading">
-                            PROJECT
-                        </div>
-
-
-                        <div class="detail-row">
-
-                            <span>
-                                Status
-                            </span>
-
-                            <strong>
-                                Planning
-                            </strong>
-
-                        </div>
-
-
-                        <div class="detail-row">
-
-                            <span>
-                                Server
-                            </span>
-
-                            <strong>
-                                Not launched
-                            </strong>
-
-                        </div>
-
-
-                        <div class="detail-row">
-
-                            <span>
-                                Address
-                            </span>
-
-                            <strong>
-                                Not available
-                            </strong>
-
-                        </div>
-
-
-                        <div class="detail-row">
-
-                            <span>
-                                Release
-                            </span>
-
-                            <strong>
-                                Undecided
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- FUTURE -->
-
-        <section class="section section-muted">
-
-            <div class="container">
-
-                <div class="feature-panel glass-light">
-
-                    <div class="feature-content">
-
-                        <div class="eyebrow">
-                            FUTURE
-                        </div>
-
-                        <h2>
-                            More information
-                            <span>when it's ready.</span>
-                        </h2>
-
-                        <p>
-                            If the project moves forward,
-                            this page can be updated with
-                            server information, gameplay
-                            details, rules, and other
-                            important information.
-                        </p>
-
-                        <a
-                            href="index.html#discord"
-                            class="text-link"
-                        >
-                            Join the Discord
-                            <span aria-hidden="true">↗</span>
-                        </a>
-
-                    </div>
-
-                    <div class="feature-mark">
-                        02
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-    </main>
-
-
-    <!-- FOOTER -->
-
-    <footer class="site-footer">
-
-        <div class="container">
-
-            <div class="footer-top">
-
-                <div class="footer-brand">
-
-                    <a
-                        href="index.html"
-                        class="brand"
-                    >
-
-                        <span class="brand-logo">
-
-                            <img
-                                src="assets/logo.png"
-                                alt=""
-                                width="38"
-                                height="38"
-                            >
-
-                        </span>
-
-                        <span class="brand-text">
-                            GamerXD_GZ
-                        </span>
-
-                    </a>
-
-                    <p>
-                        Official server website.
-                    </p>
-
-                </div>
-
-
-                <div class="footer-links">
-
-                    <div>
-
-                        <span class="footer-title">
-                            NAVIGATION
-                        </span>
-
-                        <a href="index.html">
-                            Home
-                        </a>
-
-                        <a href="index.html#about">
-                            About
-                        </a>
-
-                        <a href="minecraft.html">
-                            Minecraft
-                        </a>
-
-                    </div>
-
-
-                    <div>
-
-                        <span class="footer-title">
-                            COMMUNITY
-                        </span>
-
-                        <a
-                            href="https://discord.gg/4BHUKrzXRf"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            Discord
-                        </a>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="footer-bottom">
-
-                <span>
-                    © <span id="year">2026</span>
-                    GamerXD_GZ's Server.
-                    All rights reserved.
-                </span>
-
-                <p class="legal">
-                    GamerXD_GZ's Server is not affiliated
-                    with, endorsed by, or sponsored by
-                    Mojang Studios or Microsoft.
-                    Minecraft is a trademark of Mojang Studios.
-                </p>
-
-            </div>
-
+        <a href="https://discord.gg/CgfPRMrCQH" class="btn btn-bolt" target="_blank" rel="noopener noreferrer">Join Discord</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <a href="index.html" class="brand">
+          <span class="brand-logo"><img src="assets/logo.png" alt="" width="32" height="32"></span>
+          <span class="brand-text">GamerXD_GZ</span>
+        </a>
+        <p>Minecraft tools and a community server, built in the open.</p>
+      </div>
+      <div class="foot-cols">
+        <div class="foot-col">
+          <span>SITE</span>
+          <a href="about.html">About</a>
+          <a href="projects.html">Projects</a>
+          <a href="minecraft.html">Minecraft</a>
         </div>
+        <div class="foot-col">
+          <span>COMMUNITY</span>
+          <a href="https://discord.gg/4BHUKrzXRf" target="_blank" rel="noopener noreferrer">Discord</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span id="year">2026</span> GamerXD_GZ</span>
+      <p>Not affiliated with, endorsed by, or sponsored by Mojang Studios or Microsoft. Minecraft is a trademark of Mojang Studios.</p>
+    </div>
+  </div>
+</footer>
 
-    </footer>
-
-
-    <script src="script.js"></script>
-
+<script src="script.js"></script>
 </body>
 </html>

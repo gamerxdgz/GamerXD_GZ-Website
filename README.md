@@ -1,61 +1,20 @@
-# GamerXD_GZ's Server Website
+# GamerXD_GZ Website
 
-Official website for **GamerXD_GZ's Server**.
+Static site for GamerXD_GZ — no build step, no frameworks. Deploy as-is to GitHub Pages or Cloudflare Pages.
 
-A lightweight, modern, and responsive website built with plain HTML, CSS, and JavaScript.
+## Structure
+- `index.html` — Home
+- `about.html` — About
+- `projects.html` — Launcher, anti-cheat, and client projects
+- `minecraft.html` — LifeSteal SMP server page
+- `404.html` — Not found page
+- `style.css` — Shared stylesheet (design tokens at the top)
+- `script.js` — Mobile nav toggle + footer year
+- `assets/logo.png` — Existing site logo (unchanged)
 
-## Features
-
-* Modern responsive design
-* Dark interface
-* Lightweight HTML, CSS, and JavaScript
-* Custom GamerXD_GZ branding
-* Discord server links
-* Minecraft information page
-* Custom 404 page
-* Smooth transitions and loading experience
-* No unnecessary frameworks or dependencies
-
-## Technologies
-
-* HTML5
-* CSS3
-* JavaScript
-* Cloudflare Pages
-
-## Project Structure
-
-```text
-/
-├── index.html
-├── minecraft.html
-├── 404.html
-├── style.css
-├── script.js
-├── README.md
-├── LICENSE
-└── assets/
-    └── logo.png
-```
-
-## Deployment
-
-The website is hosted using Cloudflare Pages.
-
-## Ownership
-
-The GamerXD_GZ name, logo, original graphics, written content, and other original materials in this project belong to their respective creator.
-
-Third-party services, trademarks, and names remain the property of their respective owners.
-
-## Minecraft Disclaimer
-
-GamerXD_GZ's Server is not affiliated with, endorsed by, or sponsored by Mojang Studios or Microsoft.
-
-Minecraft is a trademark of Mojang Studios.
+## Editing
+- Two Discord invites are used: `https://discord.gg/4BHUKrzXRf` is the main server (header, footer, and every page's general CTA), and `https://discord.gg/CgfPRMrCQH` is the Minecraft server, used only on `minecraft.html`'s "Get the IP on Discord" and "Join Discord" buttons.
+- Colors, fonts, and corner radius are all controlled by the `:root` variables at the top of `style.css`.
 
 ## License
-
-This project is **All Rights Reserved**.
-
-See the `LICENSE` file for details.
+MIT — see `LICENSE`. Free to use, modify, and redistribute; just keep the copyright notice. The `assets/logo.png` mark is GamerXD_GZ's own branding, so please don't reuse it for a different project.

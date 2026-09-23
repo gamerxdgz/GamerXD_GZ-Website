@@ -1,18 +1,21 @@
-Copyright © 2026 GamerXD_GZ. All Rights Reserved.
+MIT License
 
-This website and its original source code, design, written content, graphics, branding, and assets are the property of GamerXD_GZ unless otherwise stated.
+Copyright (c) 2026 GamerXD_GZ
 
-You may view and access the website for personal, non-commercial purposes.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-You may not, without prior written permission:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-* Copy or redistribute the website or substantial portions of its source code.
-* Reuse the GamerXD_GZ logo or original graphics.
-* Republish the website as your own.
-* Sell or redistribute the original website or its assets.
-* Remove copyright or ownership notices.
-* Use the GamerXD_GZ branding to imply affiliation or endorsement.
-
-Third-party software, services, trademarks, and other materials remain the property of their respective owners.
-
-Minecraft is a trademark of Mojang Studios. GamerXD_GZ's Server is not affiliated with, endorsed by, or sponsored by Mojang Studios or Microsoft.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
